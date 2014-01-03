@@ -1,0 +1,20 @@
+{
+    "name": "m6web/statsd-bundle",
+    "description" : "Component easing the statsd usage",
+    "type": "symfony-bundle",
+    "license": "MIT",
+    "keywords": ["php", "statsd", "m6web"],
+    "config": {
+        "vendor-dir": "vendor"
+    },
+    "minimum-stability" : "dev",
+    "require": {
+        "php": ">=5.4.0"
+    },
+    "require-dev": {
+        "atoum/atoum": "master-dev"
+    },
+    "autoload": {
+        "psr-0": { "": "src/" }
+    }
+}
