@@ -48,6 +48,7 @@ class Client
     /**
      * set the params from config
      * @param array $servers les serveurs
+     *
      * @throws Exception
      *
      * @return void
@@ -158,8 +159,9 @@ class Client
     /**
      * Increments one or more stats counters
      *
-     * @param string $stats The metric(s) to increment.
-     * @param int    $sampleRate
+     * @param string $stats      The metric(s) to increment.
+     * @param int    $sampleRate SamplingRate
+     *
      * @internal param $ float|1 $sampleRate the rate (0-1) for sampling.
      *
      * @return this
@@ -175,7 +177,7 @@ class Client
     /**
      * Decrements one or more stats counters.
      *
-     * @param string $stats The metric(s) to decrement.
+     * @param string    $stats      The metric(s) to decrement.
      * @param float|int $sampleRate the rate (0-1) for sampling.
      *
      * @return this
@@ -233,7 +235,7 @@ class Client
      * send datas to servers
      *
      * @param string $server server key
-     * @param array  $datas array de data à env
+     * @param array  $datas  array de data à env
      *
      * @throws Exception
      * @return bool
