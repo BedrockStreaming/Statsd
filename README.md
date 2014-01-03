@@ -1,4 +1,4 @@
-# Stastd PHP Component
+# Stastd PHP Component [![Build Status](https://travis-ci.org/M6Web/Statsd.png?branch=master)](https://travis-ci.org/M6Web/Statsd)
 
 [usage](doc/usage.md)
 
