@@ -136,8 +136,17 @@ class Client extends atoum\test
     {
         $this->if($client = new Statsd\Client($this->getConf()))
             ->then()
-            ->object($client->count('service.raoul', 5))
-            ->isInstanceOf('\M6Web\Component\Statsd\Client');
+                ->object($client->count('service.raoul', 5))
+                ->isInstanceOf('\M6Web\Component\Statsd\Client');
+
+        $data = $client->getToSend();
+        $this->array($data['serv1'][0])
+            ->isIdenticalTo(array(
+                'stats' => 'service.raoul',
+                'value' => '5',
+                'sampleRate' => (float) 1,
+                'unit' => 'c'
+            ));
     }
 
     /**
@@ -152,6 +161,15 @@ class Client extends atoum\test
             ->then()
             ->object($client->gauge('service.raoul', 3))
             ->isInstanceOf('\M6Web\Component\Statsd\Client');
+
+        $data = $client->getToSend();
+        $this->array($data['serv1'][0])
+            ->isIdenticalTo(array(
+                'stats' => 'service.raoul',
+                'value' => '3',
+                'sampleRate' => (float) 1,
+                'unit' => 'g'
+            ));
     }
 
     /**
@@ -166,6 +184,15 @@ class Client extends atoum\test
             ->then()
             ->object($client->set('service.raoul', 9))
             ->isInstanceOf('\M6Web\Component\Statsd\Client');
+
+        $data = $client->getToSend();
+        $this->array($data['serv1'][0])
+            ->isIdenticalTo(array(
+                'stats' => 'service.raoul',
+                'value' => '9',
+                'sampleRate' => (float) 1,
+                'unit' => 's'
+            ));
     }
 
     /**
@@ -211,7 +238,7 @@ class Client extends atoum\test
             ->mock($client)
                 ->call('writeDatas')->exactly(2);
 
-        $this->if($client->count('foocount', 5)) // incr x2
+        $this->if($client->count('foocount', 5))
             ->then()
             ->boolean($client->send())
             ->mock($client)
