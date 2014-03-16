@@ -127,6 +127,75 @@ class Client extends atoum\test
     }
 
     /**
+     * testCount
+     *
+     * @access public
+     * @return void
+     */
+    public function testCount()
+    {
+        $this->if($client = new Statsd\Client($this->getConf()))
+            ->then()
+                ->object($client->count('service.raoul', 5))
+                ->isInstanceOf('\M6Web\Component\Statsd\Client');
+
+        $data = $client->getToSend();
+        $this->array($data['serv1'][0])
+            ->isIdenticalTo(array(
+                'stats' => 'service.raoul',
+                'value' => '5',
+                'sampleRate' => (float) 1,
+                'unit' => 'c'
+            ));
+    }
+
+    /**
+     * testGauge
+     *
+     * @access public
+     * @return void
+     */
+    public function testGauge()
+    {
+        $this->if($client = new Statsd\Client($this->getConf()))
+            ->then()
+            ->object($client->gauge('service.raoul', 3))
+            ->isInstanceOf('\M6Web\Component\Statsd\Client');
+
+        $data = $client->getToSend();
+        $this->array($data['serv1'][0])
+            ->isIdenticalTo(array(
+                'stats' => 'service.raoul',
+                'value' => '3',
+                'sampleRate' => (float) 1,
+                'unit' => 'g'
+            ));
+    }
+
+    /**
+     * testSet
+     *
+     * @access public
+     * @return void
+     */
+    public function testSet()
+    {
+        $this->if($client = new Statsd\Client($this->getConf()))
+            ->then()
+            ->object($client->set('service.raoul', 9))
+            ->isInstanceOf('\M6Web\Component\Statsd\Client');
+
+        $data = $client->getToSend();
+        $this->array($data['serv1'][0])
+            ->isIdenticalTo(array(
+                'stats' => 'service.raoul',
+                'value' => '9',
+                'sampleRate' => (float) 1,
+                'unit' => 's'
+            ));
+    }
+
+    /**
      * Test send
      * @return void
      */
@@ -168,5 +237,11 @@ class Client extends atoum\test
             ->boolean($client->send())
             ->mock($client)
                 ->call('writeDatas')->exactly(2);
+
+        $this->if($client->count('foocount', 5))
+            ->then()
+            ->boolean($client->send())
+            ->mock($client)
+                ->call('writeDatas')->exactly(3);
     }
 }

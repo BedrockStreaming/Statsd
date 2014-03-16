@@ -168,7 +168,7 @@ class Client
      */
     public function increment($stats, $sampleRate = 1)
     {
-        $this->addToSend($stats, '1', $sampleRate, 'c');
+        $this->count($stats, '1', $sampleRate);
 
         return $this;
     }
@@ -184,7 +184,55 @@ class Client
      */
     public function decrement($stats, $sampleRate = 1)
     {
-        $this->addToSend($stats, '-1', $sampleRate, 'c');
+        $this->count($stats, '-1', $sampleRate);
+
+        return $this;
+    }
+
+    /**
+     * Count is the default statsd method for counting
+     *
+     * @param string $stats The metric(s) to count
+     * @param int $value The count value
+     * @param float|int $sampleRate the rate (0-1) for sampling.
+     * @access public
+     * @return this
+     */
+    public function count($stats, $value, $sampleRate = 1)
+    {
+        $this->addToSend($stats, (string) $value, $sampleRate, 'c');
+
+        return $this;
+    }
+
+    /**
+     * gauge
+     *
+     * @param string $stats The metric(s) to count
+     * @param int $value The value
+     * @param float|int $sampleRate the rate (0-1) for sampling.
+     * @access public
+     * @return this
+     */
+    public function gauge($stats, $value, $sampleRate = 1)
+    {
+        $this->addToSend($stats, (string) $value, $sampleRate, 'g');
+
+        return $this;
+    }
+
+    /**
+     * set
+     *
+     * @param string $stats The metric(s) to count
+     * @param int $value The value
+     * @param float|int $sampleRate the rate (0-1) for sampling.
+     * @access public
+     * @return this
+     */
+    public function set($stats, $value, $sampleRate = 1)
+    {
+        $this->addToSend($stats, (string) $value, $sampleRate, 's');
 
         return $this;
     }
