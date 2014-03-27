@@ -9,5 +9,8 @@
                 );
 
 $client->increment('a.graphite.node');
+$client->count('a.graphite.node', 5);
 $client->timing('another.graphite.node', (float) $timing);
+$client->set('a.graphite.set', 12);
+$client->gauge('a.gauge.node', 8);
 ```
