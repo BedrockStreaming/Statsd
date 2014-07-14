@@ -119,23 +119,21 @@ class Client
 
     /**
      * addToSend
+     *
      * @param string $stats      grahite node
-     * @param string $v          value
+     * @param string $value      value
      * @param float  $sampleRate sampling rate
      * @param string $unit       unit
      *
+     * @internal param string $v value
      * @return Client
      */
-    protected function addToSend($stats, $v, $sampleRate, $unit)
+    protected function addToSend($stats, $value, $sampleRate, $unit)
     {
-        $this->toSend[$this->getServerKey($stats)][] = array(
-            'stats'      => $stats,
-            'value'      => $v,
-            'sampleRate' => (float) $sampleRate,
-            'unit'       => $unit
+        $this->toSend[$this->getServerKey($stats)][] = new MessageEntity(
+            $stats, $value, (float) $sampleRate, $unit
         );
     }
-
 
     /**
      * Log timing information
@@ -146,25 +144,24 @@ class Client
      *
      * @return Client
      */
-    public function timing($stats, $time, $sampleRate = 1)
+    public function timing($stats, $time, $sampleRate = 1.0)
     {
         $this->addToSend($stats, $time, $sampleRate, 'ms');
 
         return $this;
     }
 
-
     /**
      * Increments one or more stats counters
      *
      * @param string $stats      The metric(s) to increment.
-     * @param int    $sampleRate SamplingRate
+     * @param float  $sampleRate SamplingRate
      *
      * @internal param $ float|1 $sampleRate the rate (0-1) for sampling.
      *
      * @return Client
      */
-    public function increment($stats, $sampleRate = 1)
+    public function increment($stats, $sampleRate = 1.0)
     {
         $this->count($stats, '1', $sampleRate);
 
@@ -200,7 +197,7 @@ class Client
      */
     public function count($stats, $value, $sampleRate = 1)
     {
-        $this->addToSend($stats, (string) $value, $sampleRate, 'c');
+        $this->addToSend($stats, $value, $sampleRate, 'c');
 
         return $this;
     }
@@ -217,7 +214,7 @@ class Client
      */
     public function gauge($stats, $value, $sampleRate = 1)
     {
-        $this->addToSend($stats, (string) $value, $sampleRate, 'g');
+        $this->addToSend($stats, $value, $sampleRate, 'g');
 
         return $this;
     }
@@ -234,7 +231,7 @@ class Client
      */
     public function set($stats, $value, $sampleRate = 1)
     {
-        $this->addToSend($stats, (string) $value, $sampleRate, 's');
+        $this->addToSend($stats, $value, $sampleRate, 's');
 
         return $this;
     }
@@ -252,12 +249,13 @@ class Client
         $sampledData = array();
         foreach ($this->getToSend() as $server => $arrayToSend) {
             foreach ($arrayToSend as $data) {
-                if ($data['sampleRate'] < 1) {
+                // sampling
+                if ($data->getSampleRate() < 1) {
                     if ((mt_rand() / mt_getrandmax()) <= $data['sampleRate']) {
-                        $sampledData[$server][] = $data['stats'].':'.$data['value'].'|'.$data['unit'].'|@'.$data[2];
+                        $sampledData[$server][] = $data->getStatsdMessage(true);
                     }
                 } else {
-                    $sampledData[$server][] = $data['stats'].':'.$data['value'].'|'.$data['unit'];
+                    $sampledData[$server][] = $data->getStatsdMessage();
                 }
             }
         }
@@ -267,7 +265,7 @@ class Client
 
             return true;
         }
-        // for any server
+        // for all servers
         foreach ($sampledData as $server => $data) {
             // Divide string for max 1472 octects packet sended to statsD dram (28 for headers out-in)
             $dataLength = max(1, round(count($data) / 30));
