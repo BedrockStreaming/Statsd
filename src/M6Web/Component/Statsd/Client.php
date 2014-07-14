@@ -1,8 +1,6 @@
 <?php
 /**
- * @author Julien DENIAU, Alban COQUOIN
- * portage en sf php5.4 o_mansour
- *
+ * class sending udp packets to statsd
  *
  */
 namespace M6Web\Component\Statsd;
@@ -142,9 +140,9 @@ class Client
     /**
      * Log timing information
      *
-     * @param string $stats      The metric to in log timing info for.
-     * @param float  $time       The ellapsed time (ms) to log
-     * @param float  $sampleRate the rate (0-1) for sampling.
+     * @param string    $stats      The metric to in log timing info for.
+     * @param float     $time       The ellapsed time (ms) to log
+     * @param float|int $sampleRate the rate (0-1) for sampling.
      *
      * @return Client
      */
@@ -164,7 +162,7 @@ class Client
      *
      * @internal param $ float|1 $sampleRate the rate (0-1) for sampling.
      *
-     * @return this
+     * @return Client
      */
     public function increment($stats, $sampleRate = 1)
     {
@@ -180,7 +178,7 @@ class Client
      * @param string    $stats      The metric(s) to decrement.
      * @param float|int $sampleRate the rate (0-1) for sampling.
      *
-     * @return this
+     * @return Client
      */
     public function decrement($stats, $sampleRate = 1)
     {
@@ -192,11 +190,13 @@ class Client
     /**
      * Count is the default statsd method for counting
      *
-     * @param string $stats The metric(s) to count
-     * @param int $value The count value
+     * @param string    $stats      The metric(s) to count
+     * @param int       $value      The count value
      * @param float|int $sampleRate the rate (0-1) for sampling.
+     *
      * @access public
-     * @return this
+     *
+     * @return Client
      */
     public function count($stats, $value, $sampleRate = 1)
     {
@@ -208,11 +208,12 @@ class Client
     /**
      * gauge
      *
-     * @param string $stats The metric(s) to count
-     * @param int $value The value
+     * @param string    $stats      The metric(s) to count
+     * @param int       $value      The value
      * @param float|int $sampleRate the rate (0-1) for sampling.
+     *
      * @access public
-     * @return this
+     * @return Client
      */
     public function gauge($stats, $value, $sampleRate = 1)
     {
@@ -224,11 +225,12 @@ class Client
     /**
      * set
      *
-     * @param string $stats The metric(s) to count
-     * @param int $value The value
+     * @param string    $stats      The metric(s) to count
+     * @param int       $value      The value
      * @param float|int $sampleRate the rate (0-1) for sampling.
+     *
      * @access public
-     * @return this
+     * @return Client
      */
     public function set($stats, $value, $sampleRate = 1)
     {

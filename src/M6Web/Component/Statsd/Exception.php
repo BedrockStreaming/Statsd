@@ -1,10 +1,11 @@
 <?php
 /**
- * @author o_mansour
+ * Statsd exception
  */
 namespace M6Web\Component\Statsd;
+
 /**
- * simple surcharge de l'exception de php
+ * simple overlaod of the std exception
  */
 class Exception extends \Exception
 {
