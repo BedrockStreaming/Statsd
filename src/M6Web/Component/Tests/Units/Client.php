@@ -10,12 +10,12 @@ use
 ;
 
 /**
- * class testant le client Statsd
+ * test class for Statsd client
  */
 class Client extends atoum\test
 {
     /**
-     * test du contructeur
+     * constructor test
      */
     public function test__construct()
     {
@@ -52,7 +52,7 @@ class Client extends atoum\test
     }
 
     /**
-     * renvoi une conf de serveur
+     * send back a server config
      * @return array
      */
     protected function getConf()
@@ -65,7 +65,7 @@ class Client extends atoum\test
     }
 
     /**
-     * test du getServers
+     * test of getServers
      * @return void
      */
     public function testGetServers()
@@ -103,7 +103,7 @@ class Client extends atoum\test
     }
 
     /**
-     * [testTiming description]
+     * testTiming
      * @return void
      */
     public function testTiming()
@@ -115,7 +115,7 @@ class Client extends atoum\test
     }
 
     /**
-     * [testIncrement description]
+     * testIncrement
      * @return void
      */
     public function testIncrement()
