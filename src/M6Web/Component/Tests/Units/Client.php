@@ -1,8 +1,6 @@
 <?php
 namespace M6Web\Component\Statsd\tests\units;
 
-require_once __DIR__.'/../../../../../vendor/autoload.php';
-
 use
     \M6Web\Component\Statsd,
     \mageekguy\atoum,
