@@ -1,6 +1,6 @@
 <?php
 /**
- *
+ * Entity class for a statsd message
  */
 
 namespace M6Web\Component\Statsd;
