@@ -95,9 +95,9 @@ class MessageEntity
      */
     public function getStatsdMessage($withSampleRate = false)
     {
-        $message = $this->getNode().':'.$this->getValue().'|'.$this->getUnit();
+        $message = sprintf('%s:%s|%s', $this->getNode(), $this->getValue(), $this->getUnit());
         if ($withSampleRate) {
-            $message .= '|@'.(string) $this->getSampleRate();
+            $message .= sprintf('|@%s', $this->getSampleRate());
         }
 
         return $message;
