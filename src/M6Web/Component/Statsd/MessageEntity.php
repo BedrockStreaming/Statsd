@@ -34,7 +34,7 @@ class MessageEntity
 
     /**
      * @param string      $node       node
-     * @param string      $value      value of the node
+     * @param int         $value      value of the node
      * @param float|null  $sampleRate sampling rate
      * @param string|null $unit       units (ms for timer, c for counting ...)
      *
@@ -51,7 +51,28 @@ class MessageEntity
             $this->unit = $unit;
         }
 
+        $this->checkConstructor();
+
         return $this;
+    }
+
+    /**
+     * check if object is correct
+     *
+     * @throws Exception
+     */
+    protected function checkConstructor()
+    {
+        if (!is_string($this->node) or !is_string($this->unit))
+        {
+            throw new Exception ('node and unit have to be a string');
+        }
+        if (!is_int($this->value)) {
+            throw new Exception('value has to be an integer');
+        }
+        if (!is_float($this->sampleRate)) {
+            throw new Exception ('sampleRate has to be a float');
+        }
     }
 
     /**
@@ -67,7 +88,7 @@ class MessageEntity
      */
     public function getValue()
     {
-        return (string) $this->value;
+        return (int) $this->value;
     }
 
     /**

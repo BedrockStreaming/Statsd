@@ -22,8 +22,8 @@ class MessageEntity extends atoum\test
                 ->string($messageEntity->getNode())
                 ->isEqualTo('raoul.node')
             ->and()
-                ->string($messageEntity->getValue())
-                ->isEqualto('1')
+                ->integer($messageEntity->getValue())
+                ->isEqualto(1)
             ->and()
                 ->float($messageEntity->getSampleRate())
                 ->isIdenticalTo(0.2)
@@ -46,5 +46,23 @@ class MessageEntity extends atoum\test
             ->and()
                 ->string($messageEntity->getStatsdMessage(true))
                 ->isEqualTo('raoul.node:1|c|@0.2');
+
+    }
+
+    public function testErrorConstructorStatsdMessage()
+    {
+        $this->exception(
+            function () {
+                new Statsd\MessageEntity('raoul.node', [1], 0.2, 'c');
+            })
+            ->isInstanceOf('\M6Web\Component\Statsd\Exception')
+            ->exception(
+                function () {
+                    new Statsd\MessageEntity('raoul.node', 1, 1, 'c');
+                })
+            ->isInstanceOf('\M6Web\Component\Statsd\Exception')
+
+        ;
+
     }
 }

@@ -130,7 +130,7 @@ class Client
     protected function addToSend($stats, $value, $sampleRate, $unit)
     {
         $this->toSend[$this->getServerKey($stats)][] = new MessageEntity(
-            $stats, $value, (float) $sampleRate, $unit
+            (string) $stats, (int) $value, (float) $sampleRate, (string) $unit
         );
     }
 
@@ -138,7 +138,7 @@ class Client
      * Log timing information
      *
      * @param string    $stats      The metric to in log timing info for.
-     * @param float     $time       The ellapsed time (ms) to log
+     * @param int       $time       The ellapsed time (ms) to log
      * @param float|int $sampleRate the rate (0-1) for sampling.
      *
      * @return Client
