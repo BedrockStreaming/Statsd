@@ -125,7 +125,6 @@ class Client
      * @param float  $sampleRate sampling rate
      * @param string $unit       unit
      *
-     * @internal param string $v value
      * @return Client
      */
     protected function addToSend($stats, $value, $sampleRate, $unit)
