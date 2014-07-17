@@ -78,7 +78,7 @@ class MessageEntity
      */
     public function getNode()
     {
-        return (string) $this->node;
+        return $this->node;
     }
 
     /**
@@ -86,7 +86,7 @@ class MessageEntity
      */
     public function getValue()
     {
-        return (int) $this->value;
+        return $this->value;
     }
 
     /**
@@ -94,7 +94,7 @@ class MessageEntity
      */
     public function getSampleRate()
     {
-        return (float) $this->sampleRate;
+        return $this->sampleRate;
     }
 
     /**
@@ -102,7 +102,7 @@ class MessageEntity
      */
     public function getUnit()
     {
-        return (string) $this->unit;
+        return $this->unit;
     }
 
     /**
