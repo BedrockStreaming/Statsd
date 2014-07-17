@@ -142,8 +142,8 @@ class Client extends atoum\test
             ->isEqualTo(new Statsd\MessageEntity(
                 'service.raoul',
                 5,
-                1.0,
-                'c'
+                'c',
+                1.0
             ));
     }
 
@@ -165,8 +165,8 @@ class Client extends atoum\test
             ->isEqualTo(new Statsd\MessageEntity(
                 'service.raoul',
                 3,
-                1.0,
-                'g'
+                'g',
+                1.0
             ));
     }
 
@@ -188,8 +188,8 @@ class Client extends atoum\test
             ->isEqualTo(new Statsd\MessageEntity(
                 'service.raoul',
                 9,
-                1.0,
-                's'
+                's',
+                1.0
             ));
     }
 

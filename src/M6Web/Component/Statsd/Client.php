@@ -130,7 +130,7 @@ class Client
     protected function addToSend($stats, $value, $sampleRate, $unit)
     {
         $this->toSend[$this->getServerKey($stats)][] = new MessageEntity(
-            (string) $stats, (int) $value, (float) $sampleRate, (string) $unit
+            (string) $stats, (int) $value, (string) $unit, (float) $sampleRate
         );
     }
 

@@ -17,7 +17,7 @@ class MessageEntity extends atoum\test
     public function testGet()
     {
         $this->if($messageEntity = new Statsd\MessageEntity(
-            'raoul.node', 1, 0.2, 'c'))
+            'raoul.node', 1, 'c', 0.2))
             ->then()
                 ->string($messageEntity->getNode())
                 ->isEqualTo('raoul.node')
@@ -39,7 +39,7 @@ class MessageEntity extends atoum\test
     public function testgetStatsdMessage()
     {
         $this->if($messageEntity = new Statsd\MessageEntity(
-            'raoul.node', 1, 0.2, 'c'))
+            'raoul.node', 1, 'c', 0.2))
             ->then()
                 ->string($messageEntity->getStatsdMessage())
                 ->isEqualTo('raoul.node:1|c')

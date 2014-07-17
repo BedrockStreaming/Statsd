@@ -35,12 +35,12 @@ class MessageEntity
     /**
      * @param string      $node       node
      * @param int         $value      value of the node
-     * @param float|null  $sampleRate sampling rate
      * @param string|null $unit       units (ms for timer, c for counting ...)
+     * @param float|null  $sampleRate sampling rate
      *
      * @return MessageEntity
      */
-    public function __construct($node, $value, $sampleRate = null, $unit = null)
+    public function __construct($node, $value, $unit = null, $sampleRate = null)
     {
         $this->node  = $node;
         $this->value = $value;
