@@ -25,22 +25,22 @@ class MessageEntity
     /**
      * @var float
      */
-    protected $sampleRate = 1;
+    protected $sampleRate;
 
     /**
      * @var string
      */
-    protected $unit = '';
+    protected $unit;
 
     /**
-     * @param string      $node       node
-     * @param int         $value      value of the node
-     * @param string|null $unit       units (ms for timer, c for counting ...)
-     * @param float|null  $sampleRate sampling rate
+     * @param string $node       node
+     * @param int    $value      value of the node
+     * @param string $unit       units (ms for timer, c for counting ...)
+     * @param float  $sampleRate sampling rate
      *
      * @return MessageEntity
      */
-    public function __construct($node, $value, $unit = null, $sampleRate = null)
+    public function __construct($node, $value, $unit = '', $sampleRate = 1.0)
     {
         $this->node  = $node;
         $this->value = $value;
