@@ -52,8 +52,6 @@ class MessageEntity
         }
 
         $this->checkConstructor();
-
-        return $this;
     }
 
     /**
