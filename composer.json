@@ -15,6 +15,6 @@
         "atoum/atoum": "master-dev"
     },
     "autoload": {
-        "psr-0": { "": "src/" }
+        "psr-0": { "M6Web\\Component\\Statsd\\": "src/" }
     }
 }
