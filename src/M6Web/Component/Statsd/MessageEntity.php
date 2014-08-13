@@ -68,8 +68,8 @@ class MessageEntity
         if (!is_int($this->value)) {
             throw new Exception('value has to be an integer');
         }
-        if (!is_float($this->sampleRate)) {
-            throw new Exception ('sampleRate has to be a float');
+        if (!is_float($this->sampleRate) or ($this->sampleRate <= 0)) {
+            throw new Exception ('sampleRate has to be a non-zero posivite float');
         }
     }
 
