@@ -109,7 +109,21 @@ class Client extends atoum\test
         $this->if($client = new Statsd\Client($this->getConf()))
             ->then()
             ->object($client->timing('service.timer.raoul', 100))
-            ->isInstanceOf('\M6Web\Component\Statsd\Client');
+                ->isInstanceOf('\M6Web\Component\Statsd\Client')
+            ->and
+                ->object($queue = $client->getToSend())
+                    ->isInstanceOf('\SplQueue')
+                ->integer($queue->count())
+                    ->isEqualTo(1)
+                ->array($queue->dequeue())
+                    ->isIdenticalTo([
+                        'server' => 'serv1'
+                        , 'stats' => 'service.timer.raoul'
+                        , 'value' => 100
+                        , 'sampleRate' => (float) 1
+                        , 'unit' => 'ms'
+                    ])
+        ;
     }
 
     /**
@@ -120,8 +134,48 @@ class Client extends atoum\test
     {
         $this->if($client = new Statsd\Client($this->getConf()))
             ->then()
-            ->object($client->increment('service.raoul'))
-            ->isInstanceOf('\M6Web\Component\Statsd\Client');
+                ->object($client->increment('service.raoul'))
+                    ->isInstanceOf('\M6Web\Component\Statsd\Client')
+            ->and
+                ->object($queue = $client->getToSend())
+                    ->isInstanceOf('\SplQueue')
+                ->integer($queue->count())
+                    ->isEqualTo(1)
+                ->array($queue->dequeue())
+                    ->isIdenticalTo([
+                        'server' => 'serv1'
+                        , 'stats' => 'service.raoul'
+                        , 'value' => '1'
+                        , 'sampleRate' => (float) 1
+                        , 'unit' => 'c'
+                    ])
+        ;
+    }
+
+    /**
+     * testDecrement
+     * @return void
+     */
+    public function testDecrement()
+    {
+        $this->if($client = new Statsd\Client($this->getConf()))
+            ->then()
+                ->object($client->decrement('service.raoul'))
+                    ->isInstanceOf('\M6Web\Component\Statsd\Client')
+            ->and
+                ->object($queue = $client->getToSend())
+                    ->isInstanceOf('\SplQueue')
+                ->integer($queue->count())
+                    ->isEqualTo(1)
+                ->array($queue->dequeue())
+                    ->isIdenticalTo([
+                        'server' => 'serv1'
+                        , 'stats' => 'service.raoul'
+                        , 'value' => '-1'
+                        , 'sampleRate' => (float) 1
+                        , 'unit' => 'c'
+                    ])
+        ;
     }
 
     /**
@@ -135,16 +189,23 @@ class Client extends atoum\test
         $this->if($client = new Statsd\Client($this->getConf()))
             ->then()
                 ->object($client->count('service.raoul', 5))
-                ->isInstanceOf('\M6Web\Component\Statsd\Client');
-
-        $data = $client->getToSend();
-        $this->array($data['serv1'][0])
-            ->isIdenticalTo(array(
-                'stats' => 'service.raoul',
-                'value' => '5',
-                'sampleRate' => (float) 1,
-                'unit' => 'c'
-            ));
+                ->isInstanceOf('\M6Web\Component\Statsd\Client')
+            ->and
+                ->object($queue = $client->getToSend())
+                    ->isInstanceOf('\SplQueue')
+                ->integer($queue->count())
+                    ->isEqualTo(1)
+                ->array($queue->dequeue())
+                    ->isIdenticalTo([
+                        'server' => 'serv1'
+                        , 'stats' => 'service.raoul'
+                        , 'value' => '5'
+                        , 'sampleRate' => (float) 1
+                        , 'unit' => 'c'
+                    ])
+                ->integer($queue->count())
+                    ->isEqualTo(0)
+        ;
     }
 
     /**
@@ -158,16 +219,24 @@ class Client extends atoum\test
         $this->if($client = new Statsd\Client($this->getConf()))
             ->then()
             ->object($client->gauge('service.raoul', 3))
-            ->isInstanceOf('\M6Web\Component\Statsd\Client');
+                ->isInstanceOf('\M6Web\Component\Statsd\Client')
+            ->and
+                ->object($queue = $client->getToSend())
+                    ->isInstanceOf('\SplQueue')
+                ->integer($queue->count())
+                    ->isEqualTo(1)
+                ->array($queue->dequeue())
+                    ->isIdenticalTo([
+                        'server' => 'serv1'
+                        , 'stats' => 'service.raoul'
+                        , 'value' => '3'
+                        , 'sampleRate' => (float) 1
+                        , 'unit' => 'g'
+                    ])
+                ->integer($queue->count())
+                    ->isEqualTo(0)
+        ;
 
-        $data = $client->getToSend();
-        $this->array($data['serv1'][0])
-            ->isIdenticalTo(array(
-                'stats' => 'service.raoul',
-                'value' => '3',
-                'sampleRate' => (float) 1,
-                'unit' => 'g'
-            ));
     }
 
     /**
@@ -180,17 +249,25 @@ class Client extends atoum\test
     {
         $this->if($client = new Statsd\Client($this->getConf()))
             ->then()
-            ->object($client->set('service.raoul', 9))
-            ->isInstanceOf('\M6Web\Component\Statsd\Client');
+                ->object($client->set('service.raoul', 9))
+                    ->isInstanceOf('\M6Web\Component\Statsd\Client')
+            ->and
+                ->object($queue = $client->getToSend())
+                    ->isInstanceOf('\SplQueue')
+                ->integer($queue->count())
+                    ->isEqualTo(1)
+                ->array($queue->dequeue())
+                    ->isIdenticalTo([
+                        'server' => 'serv1'
+                        , 'stats' => 'service.raoul'
+                        , 'value' => '9'
+                        , 'sampleRate' => (float) 1
+                        , 'unit' => 's'
+                    ])
+                ->integer($queue->count())
+                    ->isEqualTo(0)
+        ;
 
-        $data = $client->getToSend();
-        $this->array($data['serv1'][0])
-            ->isIdenticalTo(array(
-                'stats' => 'service.raoul',
-                'value' => '9',
-                'sampleRate' => (float) 1,
-                'unit' => 's'
-            ));
     }
 
     /**

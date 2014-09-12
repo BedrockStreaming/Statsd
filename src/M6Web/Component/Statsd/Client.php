@@ -12,9 +12,9 @@ class Client
 {
     /**
      * commands to send
-     * @var array
+     * @var \SplQueue
      */
-    protected $toSend = array();
+    protected $toSend;
 
     /**
      * statsd servers
@@ -41,6 +41,7 @@ class Client
     public function __construct(array $servers)
     {
         $this->init($servers);
+        $this->initQueue();
     }
 
     /**
@@ -77,6 +78,15 @@ class Client
     }
 
     /**
+     * Init spl queue
+     */
+    protected function initQueue()
+    {
+        $this->toSend = new \SplQueue();
+        $this->toSend->setIteratorMode(\SplQueue::IT_MODE_DELETE);
+    }
+
+    /**
      * get servers
      * @return array
      */
@@ -100,7 +110,7 @@ class Client
      */
     public function clearToSend()
     {
-        $this->toSend = array();
+        $this->initQueue();
 
         return $this;
     }
@@ -128,14 +138,39 @@ class Client
      */
     protected function addToSend($stats, $v, $sampleRate, $unit)
     {
-        $this->toSend[$this->getServerKey($stats)][] = array(
-            'stats'      => $stats,
-            'value'      => $v,
-            'sampleRate' => (float) $sampleRate,
-            'unit'       => $unit
-        );
+        $queue = [
+            'server'       => $this->getServerKey($stats)
+            , 'stats'      => $stats
+            , 'value'      => $v
+            , 'sampleRate' => (float) $sampleRate
+            , 'unit'       => $unit
+        ];
+
+        $this->toSend->enqueue($queue);
     }
 
+    /**
+     * Build data to send
+     *
+     * @return array
+     */
+    protected function buildSampledData()
+    {
+        $sampledData = [];
+
+        foreach ($this->getToSend() as $metric) {
+            $server = $metric['server'];
+            if ($metric['sampleRate'] < 1) {
+                if ((mt_rand() / mt_getrandmax()) <= $metric['sampleRate']) {
+                    $sampledData[$server][] = $metric['stats'].':'.$metric['value'].'|'.$metric['unit'].'|@'.$metric[2];
+                }
+            } else {
+                $sampledData[$server][] = $metric['stats'].':'.$metric['value'].'|'.$metric['unit'];
+            }
+        }
+
+        return $sampledData;
+    }
 
     /**
      * Log timing information
@@ -248,25 +283,12 @@ class Client
      **/
     public function send()
     {
-        // build sampledata
-        $sampledData = array();
-        foreach ($this->getToSend() as $server => $arrayToSend) {
-            foreach ($arrayToSend as $data) {
-                if ($data['sampleRate'] < 1) {
-                    if ((mt_rand() / mt_getrandmax()) <= $data['sampleRate']) {
-                        $sampledData[$server][] = $data['stats'].':'.$data['value'].'|'.$data['unit'].'|@'.$data[2];
-                    }
-                } else {
-                    $sampledData[$server][] = $data['stats'].':'.$data['value'].'|'.$data['unit'];
-                }
-            }
-        }
-        // clear data to send
-        $this->clearToSend();
-        if (0 == count($sampledData)) {
-
+        if ($this->toSend->isEmpty()) {
             return true;
         }
+
+        $sampledData = $this->buildSampledData();
+
         // for any server
         foreach ($sampledData as $server => $data) {
             // Divide string for max 1472 octects packet sended to statsD dram (28 for headers out-in)
