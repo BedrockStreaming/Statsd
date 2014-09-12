@@ -291,12 +291,10 @@ class Client
 
         // for any server
         foreach ($sampledData as $server => $data) {
-            // Divide string for max 1472 octects packet sended to statsD dram (28 for headers out-in)
-            $dataLength = max(1, round(count($data) / 30));
+            $packets = array_chunk($data, 30);
 
-            for ($i = 0; $i < $dataLength; $i++) {
-                $datas = array_slice($data, $i * 30, 30);
-                $this->writeDatas($server, $datas);
+            foreach ($packets as $packet) {
+                $this->writeDatas($server, $packet);
             }
         }
 
