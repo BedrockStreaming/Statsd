@@ -129,21 +129,24 @@ class Client
 
     /**
      * addToSend
+     *
      * @param string $stats      grahite node
-     * @param string $v          value
+     * @param string $value      value
      * @param float  $sampleRate sampling rate
      * @param string $unit       unit
      *
      * @return Client
      */
-    protected function addToSend($stats, $v, $sampleRate, $unit)
+    protected function addToSend($stats, $value, $sampleRate, $unit)
     {
+
+        $message =  new MessageEntity(
+            (string) $stats, (int) $value, (string) $unit, (float) $sampleRate
+        );
+
         $queue = [
             'server'       => $this->getServerKey($stats)
-            , 'stats'      => $stats
-            , 'value'      => $v
-            , 'sampleRate' => (float) $sampleRate
-            , 'unit'       => $unit
+            , 'message'      => $message
         ];
 
         $this->toSend->enqueue($queue);
@@ -160,13 +163,8 @@ class Client
 
         foreach ($this->getToSend() as $metric) {
             $server = $metric['server'];
-            if ($metric['sampleRate'] < 1) {
-                if ((mt_rand() / mt_getrandmax()) <= $metric['sampleRate']) {
-                    $sampledData[$server][] = $metric['stats'].':'.$metric['value'].'|'.$metric['unit'].'|@'.$metric[2];
-                }
-            } else {
-                $sampledData[$server][] = $metric['stats'].':'.$metric['value'].'|'.$metric['unit'];
-            }
+            $sampledData[$server][] = $metric['message']->getStatsdMessage();
+
         }
 
         return $sampledData;
@@ -176,30 +174,29 @@ class Client
      * Log timing information
      *
      * @param string    $stats      The metric to in log timing info for.
-     * @param float     $time       The ellapsed time (ms) to log
+     * @param int       $time       The ellapsed time (ms) to log
      * @param float|int $sampleRate the rate (0-1) for sampling.
      *
      * @return Client
      */
-    public function timing($stats, $time, $sampleRate = 1)
+    public function timing($stats, $time, $sampleRate = 1.0)
     {
         $this->addToSend($stats, $time, $sampleRate, 'ms');
 
         return $this;
     }
 
-
     /**
      * Increments one or more stats counters
      *
      * @param string $stats      The metric(s) to increment.
-     * @param int    $sampleRate SamplingRate
+     * @param float  $sampleRate SamplingRate
      *
      * @internal param $ float|1 $sampleRate the rate (0-1) for sampling.
      *
      * @return Client
      */
-    public function increment($stats, $sampleRate = 1)
+    public function increment($stats, $sampleRate = 1.0)
     {
         $this->count($stats, '1', $sampleRate);
 
@@ -235,7 +232,7 @@ class Client
      */
     public function count($stats, $value, $sampleRate = 1)
     {
-        $this->addToSend($stats, (string) $value, $sampleRate, 'c');
+        $this->addToSend($stats, $value, $sampleRate, 'c');
 
         return $this;
     }
@@ -252,7 +249,7 @@ class Client
      */
     public function gauge($stats, $value, $sampleRate = 1)
     {
-        $this->addToSend($stats, (string) $value, $sampleRate, 'g');
+        $this->addToSend($stats, $value, $sampleRate, 'g');
 
         return $this;
     }
@@ -269,7 +266,7 @@ class Client
      */
     public function set($stats, $value, $sampleRate = 1)
     {
-        $this->addToSend($stats, (string) $value, $sampleRate, 's');
+        $this->addToSend($stats, $value, $sampleRate, 's');
 
         return $this;
     }
@@ -289,7 +286,6 @@ class Client
 
         $sampledData = $this->buildSampledData();
 
-        // for any server
         foreach ($sampledData as $server => $data) {
             $packets = array_chunk($data, 30);
 

@@ -106,6 +106,13 @@ class Client extends atoum\test
      */
     public function testTiming()
     {
+        $message = new Statsd\MessageEntity(
+            'service.timer.raoul',
+            100,
+            'ms',
+            1.0
+        );
+
         $this->if($client = new Statsd\Client($this->getConf()))
             ->then()
             ->object($client->timing('service.timer.raoul', 100))
@@ -116,12 +123,9 @@ class Client extends atoum\test
                 ->integer($queue->count())
                     ->isEqualTo(1)
                 ->array($queue->dequeue())
-                    ->isIdenticalTo([
+                    ->isEqualTo([
                         'server' => 'serv1'
-                        , 'stats' => 'service.timer.raoul'
-                        , 'value' => 100
-                        , 'sampleRate' => (float) 1
-                        , 'unit' => 'ms'
+                        , 'message' => $message
                     ])
         ;
     }
@@ -132,6 +136,13 @@ class Client extends atoum\test
      */
     public function testIncrement()
     {
+        $message = new Statsd\MessageEntity(
+            'service.raoul',
+            1,
+            'c',
+            1.0
+        );
+
         $this->if($client = new Statsd\Client($this->getConf()))
             ->then()
                 ->object($client->increment('service.raoul'))
@@ -142,12 +153,9 @@ class Client extends atoum\test
                 ->integer($queue->count())
                     ->isEqualTo(1)
                 ->array($queue->dequeue())
-                    ->isIdenticalTo([
+                    ->isEqualTo([
                         'server' => 'serv1'
-                        , 'stats' => 'service.raoul'
-                        , 'value' => '1'
-                        , 'sampleRate' => (float) 1
-                        , 'unit' => 'c'
+                        , 'message' => $message
                     ])
         ;
     }
@@ -158,6 +166,13 @@ class Client extends atoum\test
      */
     public function testDecrement()
     {
+        $message = new Statsd\MessageEntity(
+            'service.raoul',
+            -1,
+            'c',
+            1.0
+        );
+
         $this->if($client = new Statsd\Client($this->getConf()))
             ->then()
                 ->object($client->decrement('service.raoul'))
@@ -168,12 +183,9 @@ class Client extends atoum\test
                 ->integer($queue->count())
                     ->isEqualTo(1)
                 ->array($queue->dequeue())
-                    ->isIdenticalTo([
+                    ->isEqualTo([
                         'server' => 'serv1'
-                        , 'stats' => 'service.raoul'
-                        , 'value' => '-1'
-                        , 'sampleRate' => (float) 1
-                        , 'unit' => 'c'
+                        , 'message' => $message
                     ])
         ;
     }
@@ -186,6 +198,13 @@ class Client extends atoum\test
      */
     public function testCount()
     {
+
+        $message = new Statsd\MessageEntity(
+            'service.raoul',
+            5,
+            'c',
+            1.0
+        );
         $this->if($client = new Statsd\Client($this->getConf()))
             ->then()
                 ->object($client->count('service.raoul', 5))
@@ -196,12 +215,9 @@ class Client extends atoum\test
                 ->integer($queue->count())
                     ->isEqualTo(1)
                 ->array($queue->dequeue())
-                    ->isIdenticalTo([
+                    ->isEqualTo([
                         'server' => 'serv1'
-                        , 'stats' => 'service.raoul'
-                        , 'value' => '5'
-                        , 'sampleRate' => (float) 1
-                        , 'unit' => 'c'
+                        , 'message' => $message
                     ])
                 ->integer($queue->count())
                     ->isEqualTo(0)
@@ -216,6 +232,13 @@ class Client extends atoum\test
      */
     public function testGauge()
     {
+
+        $message = new Statsd\MessageEntity(
+            'service.raoul',
+            3,
+            'g',
+            1.0
+        );
         $this->if($client = new Statsd\Client($this->getConf()))
             ->then()
             ->object($client->gauge('service.raoul', 3))
@@ -226,17 +249,13 @@ class Client extends atoum\test
                 ->integer($queue->count())
                     ->isEqualTo(1)
                 ->array($queue->dequeue())
-                    ->isIdenticalTo([
+                    ->isEqualTo([
                         'server' => 'serv1'
-                        , 'stats' => 'service.raoul'
-                        , 'value' => '3'
-                        , 'sampleRate' => (float) 1
-                        , 'unit' => 'g'
+                        , 'message' => $message
                     ])
                 ->integer($queue->count())
                     ->isEqualTo(0)
         ;
-
     }
 
     /**
@@ -247,8 +266,15 @@ class Client extends atoum\test
      */
     public function testSet()
     {
+        $message = new Statsd\MessageEntity(
+            'service.raoul',
+            9,
+            's',
+            1.0
+        );
         $this->if($client = new Statsd\Client($this->getConf()))
             ->then()
+
                 ->object($client->set('service.raoul', 9))
                     ->isInstanceOf('\M6Web\Component\Statsd\Client')
             ->and
@@ -257,17 +283,13 @@ class Client extends atoum\test
                 ->integer($queue->count())
                     ->isEqualTo(1)
                 ->array($queue->dequeue())
-                    ->isIdenticalTo([
+                    ->isEqualTo([
                         'server' => 'serv1'
-                        , 'stats' => 'service.raoul'
-                        , 'value' => '9'
-                        , 'sampleRate' => (float) 1
-                        , 'unit' => 's'
+                        , 'message' => $message
                     ])
                 ->integer($queue->count())
                     ->isEqualTo(0)
         ;
-
     }
 
     /**
