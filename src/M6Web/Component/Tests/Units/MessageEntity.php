@@ -70,9 +70,13 @@ class MessageEntity extends atoum\test
                 function () {
                     new Statsd\MessageEntity('raoul.node', 1, -1, 'c');
                 })
-            ->isInstanceOf('\M6Web\Component\Statsd\Exception')
-        ;
+            ->isInstanceOf('\M6Web\Component\Statsd\Exception');
 
+        $this->exception(
+            function () {
+                new Statsd\MessageEntity('raoul.node', [1]);
+            })
+            ->isInstanceOf('\M6Web\Component\Statsd\Exception');
 
     }
 }
