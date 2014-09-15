@@ -138,12 +138,12 @@ class Client extends atoum\test
                 ->isInstanceOf('\M6Web\Component\Statsd\Client');
 
         $data = $client->getToSend();
-        $this->array($data['serv1'][0])
-            ->isIdenticalTo(array(
-                'stats' => 'service.raoul',
-                'value' => '5',
-                'sampleRate' => (float) 1,
-                'unit' => 'c'
+        $this->object($data['serv1'][0])
+            ->isEqualTo(new Statsd\MessageEntity(
+                'service.raoul',
+                5,
+                'c',
+                1.0
             ));
     }
 
@@ -161,12 +161,12 @@ class Client extends atoum\test
             ->isInstanceOf('\M6Web\Component\Statsd\Client');
 
         $data = $client->getToSend();
-        $this->array($data['serv1'][0])
-            ->isIdenticalTo(array(
-                'stats' => 'service.raoul',
-                'value' => '3',
-                'sampleRate' => (float) 1,
-                'unit' => 'g'
+        $this->object($data['serv1'][0])
+            ->isEqualTo(new Statsd\MessageEntity(
+                'service.raoul',
+                3,
+                'g',
+                1.0
             ));
     }
 
@@ -184,12 +184,12 @@ class Client extends atoum\test
             ->isInstanceOf('\M6Web\Component\Statsd\Client');
 
         $data = $client->getToSend();
-        $this->array($data['serv1'][0])
-            ->isIdenticalTo(array(
-                'stats' => 'service.raoul',
-                'value' => '9',
-                'sampleRate' => (float) 1,
-                'unit' => 's'
+        $this->object($data['serv1'][0])
+            ->isEqualTo(new Statsd\MessageEntity(
+                'service.raoul',
+                9,
+                's',
+                1.0
             ));
     }
 
