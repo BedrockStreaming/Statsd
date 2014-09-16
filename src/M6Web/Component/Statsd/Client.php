@@ -12,9 +12,9 @@ class Client
 {
     /**
      * commands to send
-     * @var array
+     * @var \SplQueue
      */
-    protected $toSend = array();
+    protected $toSend;
 
     /**
      * statsd servers
@@ -41,6 +41,7 @@ class Client
     public function __construct(array $servers)
     {
         $this->init($servers);
+        $this->initQueue();
     }
 
     /**
@@ -77,6 +78,15 @@ class Client
     }
 
     /**
+     * Init spl queue
+     */
+    protected function initQueue()
+    {
+        $this->toSend = new \SplQueue();
+        $this->toSend->setIteratorMode(\SplQueue::IT_MODE_DELETE);
+    }
+
+    /**
      * get servers
      * @return array
      */
@@ -100,7 +110,7 @@ class Client
      */
     public function clearToSend()
     {
-        $this->toSend = array();
+        $this->initQueue();
 
         return $this;
     }
@@ -129,9 +139,35 @@ class Client
      */
     protected function addToSend($stats, $value, $sampleRate, $unit)
     {
-        $this->toSend[$this->getServerKey($stats)][] = new MessageEntity(
+
+        $message =  new MessageEntity(
             (string) $stats, (int) $value, (string) $unit, (float) $sampleRate
         );
+
+        $queue = [
+            'server'       => $this->getServerKey($stats)
+            , 'message'      => $message
+        ];
+
+        $this->toSend->enqueue($queue);
+    }
+
+    /**
+     * Build data to send
+     *
+     * @return array
+     */
+    protected function buildSampledData()
+    {
+        $sampledData = [];
+
+        foreach ($this->getToSend() as $metric) {
+            $server = $metric['server'];
+            $sampledData[$server][] = $metric['message']->getStatsdMessage();
+
+        }
+
+        return $sampledData;
     }
 
     /**
@@ -244,34 +280,17 @@ class Client
      **/
     public function send()
     {
-        // build sampledata
-        $sampledData = array();
-        foreach ($this->getToSend() as $server => $arrayToSend) {
-            foreach ($arrayToSend as $data) {
-                // sampling
-                if ($data->getSampleRate() < 1) {
-                    if ((mt_rand() / mt_getrandmax()) <= $data['sampleRate']) {
-                        $sampledData[$server][] = $data->getStatsdMessage(true);
-                    }
-                } else {
-                    $sampledData[$server][] = $data->getStatsdMessage();
-                }
-            }
-        }
-        // clear data to send
-        $this->clearToSend();
-        if (0 == count($sampledData)) {
-
+        if ($this->toSend->isEmpty()) {
             return true;
         }
-        // for all servers
-        foreach ($sampledData as $server => $data) {
-            // Divide string for max 1472 octects packet sended to statsD dram (28 for headers out-in)
-            $dataLength = max(1, round(count($data) / 30));
 
-            for ($i = 0; $i < $dataLength; $i++) {
-                $datas = array_slice($data, $i * 30, 30);
-                $this->writeDatas($server, $datas);
+        $sampledData = $this->buildSampledData();
+
+        foreach ($sampledData as $server => $data) {
+            $packets = array_chunk($data, 30);
+
+            foreach ($packets as $packet) {
+                $this->writeDatas($server, $packet);
             }
         }
 

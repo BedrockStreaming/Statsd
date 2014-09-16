@@ -106,10 +106,28 @@ class Client extends atoum\test
      */
     public function testTiming()
     {
+        $message = new Statsd\MessageEntity(
+            'service.timer.raoul',
+            100,
+            'ms',
+            1.0
+        );
+
         $this->if($client = new Statsd\Client($this->getConf()))
             ->then()
             ->object($client->timing('service.timer.raoul', 100))
-            ->isInstanceOf('\M6Web\Component\Statsd\Client');
+                ->isInstanceOf('\M6Web\Component\Statsd\Client')
+            ->and
+                ->object($queue = $client->getToSend())
+                    ->isInstanceOf('\SplQueue')
+                ->integer($queue->count())
+                    ->isEqualTo(1)
+                ->array($queue->dequeue())
+                    ->isEqualTo([
+                        'server' => 'serv1'
+                        , 'message' => $message
+                    ])
+        ;
     }
 
     /**
@@ -118,10 +136,58 @@ class Client extends atoum\test
      */
     public function testIncrement()
     {
+        $message = new Statsd\MessageEntity(
+            'service.raoul',
+            1,
+            'c',
+            1.0
+        );
+
         $this->if($client = new Statsd\Client($this->getConf()))
             ->then()
-            ->object($client->increment('service.raoul'))
-            ->isInstanceOf('\M6Web\Component\Statsd\Client');
+                ->object($client->increment('service.raoul'))
+                    ->isInstanceOf('\M6Web\Component\Statsd\Client')
+            ->and
+                ->object($queue = $client->getToSend())
+                    ->isInstanceOf('\SplQueue')
+                ->integer($queue->count())
+                    ->isEqualTo(1)
+                ->array($queue->dequeue())
+                    ->isEqualTo([
+                        'server' => 'serv1'
+                        , 'message' => $message
+                    ])
+        ;
+    }
+
+    /**
+     * testDecrement
+     * @return void
+     */
+    public function testDecrement()
+    {
+        $message = new Statsd\MessageEntity(
+            'service.raoul',
+            -1,
+            'c',
+            1.0
+        );
+
+        $this->if($client = new Statsd\Client($this->getConf()))
+            ->then()
+                ->object($client->decrement('service.raoul'))
+                    ->isInstanceOf('\M6Web\Component\Statsd\Client')
+            ->and
+                ->object($queue = $client->getToSend())
+                    ->isInstanceOf('\SplQueue')
+                ->integer($queue->count())
+                    ->isEqualTo(1)
+                ->array($queue->dequeue())
+                    ->isEqualTo([
+                        'server' => 'serv1'
+                        , 'message' => $message
+                    ])
+        ;
     }
 
     /**
@@ -132,19 +198,30 @@ class Client extends atoum\test
      */
     public function testCount()
     {
+
+        $message = new Statsd\MessageEntity(
+            'service.raoul',
+            5,
+            'c',
+            1.0
+        );
         $this->if($client = new Statsd\Client($this->getConf()))
             ->then()
                 ->object($client->count('service.raoul', 5))
-                ->isInstanceOf('\M6Web\Component\Statsd\Client');
-
-        $data = $client->getToSend();
-        $this->object($data['serv1'][0])
-            ->isEqualTo(new Statsd\MessageEntity(
-                'service.raoul',
-                5,
-                'c',
-                1.0
-            ));
+                ->isInstanceOf('\M6Web\Component\Statsd\Client')
+            ->and
+                ->object($queue = $client->getToSend())
+                    ->isInstanceOf('\SplQueue')
+                ->integer($queue->count())
+                    ->isEqualTo(1)
+                ->array($queue->dequeue())
+                    ->isEqualTo([
+                        'server' => 'serv1'
+                        , 'message' => $message
+                    ])
+                ->integer($queue->count())
+                    ->isEqualTo(0)
+        ;
     }
 
     /**
@@ -155,19 +232,30 @@ class Client extends atoum\test
      */
     public function testGauge()
     {
+
+        $message = new Statsd\MessageEntity(
+            'service.raoul',
+            3,
+            'g',
+            1.0
+        );
         $this->if($client = new Statsd\Client($this->getConf()))
             ->then()
             ->object($client->gauge('service.raoul', 3))
-            ->isInstanceOf('\M6Web\Component\Statsd\Client');
-
-        $data = $client->getToSend();
-        $this->object($data['serv1'][0])
-            ->isEqualTo(new Statsd\MessageEntity(
-                'service.raoul',
-                3,
-                'g',
-                1.0
-            ));
+                ->isInstanceOf('\M6Web\Component\Statsd\Client')
+            ->and
+                ->object($queue = $client->getToSend())
+                    ->isInstanceOf('\SplQueue')
+                ->integer($queue->count())
+                    ->isEqualTo(1)
+                ->array($queue->dequeue())
+                    ->isEqualTo([
+                        'server' => 'serv1'
+                        , 'message' => $message
+                    ])
+                ->integer($queue->count())
+                    ->isEqualTo(0)
+        ;
     }
 
     /**
@@ -178,19 +266,30 @@ class Client extends atoum\test
      */
     public function testSet()
     {
+        $message = new Statsd\MessageEntity(
+            'service.raoul',
+            9,
+            's',
+            1.0
+        );
         $this->if($client = new Statsd\Client($this->getConf()))
             ->then()
-            ->object($client->set('service.raoul', 9))
-            ->isInstanceOf('\M6Web\Component\Statsd\Client');
 
-        $data = $client->getToSend();
-        $this->object($data['serv1'][0])
-            ->isEqualTo(new Statsd\MessageEntity(
-                'service.raoul',
-                9,
-                's',
-                1.0
-            ));
+                ->object($client->set('service.raoul', 9))
+                    ->isInstanceOf('\M6Web\Component\Statsd\Client')
+            ->and
+                ->object($queue = $client->getToSend())
+                    ->isInstanceOf('\SplQueue')
+                ->integer($queue->count())
+                    ->isEqualTo(1)
+                ->array($queue->dequeue())
+                    ->isEqualTo([
+                        'server' => 'serv1'
+                        , 'message' => $message
+                    ])
+                ->integer($queue->count())
+                    ->isEqualTo(0)
+        ;
     }
 
     /**

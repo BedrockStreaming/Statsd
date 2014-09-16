@@ -38,15 +38,24 @@ class MessageEntity extends atoum\test
      */
     public function testgetStatsdMessage()
     {
+        // not sampled message
+        $this->if($messageEntity = new Statsd\MessageEntity(
+            'raoul.node', 1, 'c'))
+            ->then()
+                ->string($messageEntity->getStatsdMessage())
+                ->isEqualTo('raoul.node:1|c')
+        ;
+
+        // sampled message
+        $this->function->mt_rand = function() { return 1;};
+        $this->function->mt_getrandmax = function() { return 10;};
+
         $this->if($messageEntity = new Statsd\MessageEntity(
             'raoul.node', 1, 'c', 0.2))
             ->then()
                 ->string($messageEntity->getStatsdMessage())
-                ->isEqualTo('raoul.node:1|c')
-            ->and()
-                ->string($messageEntity->getStatsdMessage(true))
-                ->isEqualTo('raoul.node:1|c|@0.2');
-
+                    ->isEqualTo('raoul.node:1|c|@0.2')
+        ;
     }
 
     public function testErrorConstructorStatsdMessage()

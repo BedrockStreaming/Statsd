@@ -74,6 +74,20 @@ class MessageEntity
     }
 
     /**
+     * Should we use sampleRate in message ?
+     *
+     * @return bool
+     */
+    protected function useSampleRate()
+    {
+        if (($this->getSampleRate() < 1) && (mt_rand() / mt_getrandmax()) <= $this->getSampleRate()) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * @return string
      */
     public function getNode()
@@ -108,14 +122,12 @@ class MessageEntity
     /**
      * format a statsd message
      *
-     * @param bool $withSampleRate
-     *
      * @return string
      */
-    public function getStatsdMessage($withSampleRate = false)
+    public function getStatsdMessage()
     {
         $message = sprintf('%s:%s|%s', $this->getNode(), $this->getValue(), $this->getUnit());
-        if ($withSampleRate) {
+        if ($this->useSampleRate()) {
             $message .= sprintf('|@%s', $this->getSampleRate());
         }
 
