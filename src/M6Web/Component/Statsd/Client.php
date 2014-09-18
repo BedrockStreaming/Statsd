@@ -83,7 +83,6 @@ class Client
     protected function initQueue()
     {
         $this->toSend = new \SplQueue();
-        $this->toSend->setIteratorMode(\SplQueue::IT_MODE_DELETE);
     }
 
     /**
@@ -293,6 +292,7 @@ class Client
                 $this->writeDatas($server, $packet);
             }
         }
+        $this->clearToSend();
 
         return true;
     }
