@@ -4,10 +4,8 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "50fc4be5bfd19aa634ad25108cd6d730",
-    "packages": [
-
-    ],
+    "hash": "b3eadba16613240bdce99d2bf5bccfcd",
+    "packages": [],
     "packages-dev": [
         {
             "name": "atoum/atoum",
@@ -15,12 +13,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/atoum/atoum.git",
-                "reference": "fc140ab62c6e9abe4e11bdc8db3fe4dfb417ae0c"
+                "reference": "1a38d209f1f2222e31fc49ea9b93679d2852960d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/atoum/atoum/zipball/fc140ab62c6e9abe4e11bdc8db3fe4dfb417ae0c",
-                "reference": "fc140ab62c6e9abe4e11bdc8db3fe4dfb417ae0c",
+                "url": "https://api.github.com/repos/atoum/atoum/zipball/1a38d209f1f2222e31fc49ea9b93679d2852960d",
+                "reference": "1a38d209f1f2222e31fc49ea9b93679d2852960d",
                 "shasum": ""
             },
             "require": {
@@ -41,6 +39,11 @@
                 "bin/atoum"
             ],
             "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.x-dev"
+                }
+            },
             "autoload": {
                 "classmap": [
                     "classes/"
@@ -81,20 +84,160 @@
                 "test",
                 "unit testing"
             ],
-            "time": "2014-07-08 15:46:23"
+            "time": "2014-12-04 16:17:48"
+        },
+        {
+            "name": "m6web/coke",
+            "version": "v1.2.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/M6Web/Coke.git",
+                "reference": "dcc943b4da9a677911504cb0fb5cf4d8f0d962d0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/M6Web/Coke/zipball/dcc943b4da9a677911504cb0fb5cf4d8f0d962d0",
+                "reference": "dcc943b4da9a677911504cb0fb5cf4d8f0d962d0",
+                "shasum": ""
+            },
+            "require": {
+                "squizlabs/php_codesniffer": "~1.5"
+            },
+            "suggest": {
+                "m6web/symfony2-coding-standard": "Symfony2 PHP CodeSniffer Coding Standard"
+            },
+            "bin": [
+                "coke"
+            ],
+            "type": "library",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "PHP Code Sniffer configurator",
+            "time": "2014-11-02 18:26:32"
+        },
+        {
+            "name": "m6web/symfony2-coding-standard",
+            "version": "v1.2.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/M6Web/Symfony2-coding-standard.git",
+                "reference": "51190f81cd40b86b204874b79761ddd5aa2b3023"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/M6Web/Symfony2-coding-standard/zipball/51190f81cd40b86b204874b79761ddd5aa2b3023",
+                "reference": "51190f81cd40b86b204874b79761ddd5aa2b3023",
+                "shasum": ""
+            },
+            "suggest": {
+                "m6web/coke": "PHP CodeSniffer configurator",
+                "squizlabs/php_codesniffer": "PHP CodeSniffer"
+            },
+            "type": "library",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Mikael Randy",
+                    "role": "maintainer"
+                }
+            ],
+            "description": "Symfony2 PHP CodeSniffer Coding Standard",
+            "keywords": [
+                "Symfony2",
+                "codesniffer",
+                "m6web",
+                "phpcs",
+                "standard"
+            ],
+            "time": "2014-10-07 08:21:43"
+        },
+        {
+            "name": "squizlabs/php_codesniffer",
+            "version": "1.5.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/squizlabs/PHP_CodeSniffer.git",
+                "reference": "5d973e59cf58a0c847f298de84374c96b42b17b3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/5d973e59cf58a0c847f298de84374c96b42b17b3",
+                "reference": "5d973e59cf58a0c847f298de84374c96b42b17b3",
+                "shasum": ""
+            },
+            "require": {
+                "ext-tokenizer": "*",
+                "php": ">=5.1.2"
+            },
+            "suggest": {
+                "phpunit/php-timer": "dev-master"
+            },
+            "bin": [
+                "scripts/phpcs"
+            ],
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-phpcs-fixer": "2.0.x-dev"
+                }
+            },
+            "autoload": {
+                "classmap": [
+                    "CodeSniffer.php",
+                    "CodeSniffer/CLI.php",
+                    "CodeSniffer/Exception.php",
+                    "CodeSniffer/File.php",
+                    "CodeSniffer/Report.php",
+                    "CodeSniffer/Reporting.php",
+                    "CodeSniffer/Sniff.php",
+                    "CodeSniffer/Tokens.php",
+                    "CodeSniffer/Reports/",
+                    "CodeSniffer/CommentParser/",
+                    "CodeSniffer/Tokenizers/",
+                    "CodeSniffer/DocGenerators/",
+                    "CodeSniffer/Standards/AbstractPatternSniff.php",
+                    "CodeSniffer/Standards/AbstractScopeSniff.php",
+                    "CodeSniffer/Standards/AbstractVariableSniff.php",
+                    "CodeSniffer/Standards/IncorrectPatternException.php",
+                    "CodeSniffer/Standards/Generic/Sniffs/",
+                    "CodeSniffer/Standards/MySource/Sniffs/",
+                    "CodeSniffer/Standards/PEAR/Sniffs/",
+                    "CodeSniffer/Standards/PSR1/Sniffs/",
+                    "CodeSniffer/Standards/PSR2/Sniffs/",
+                    "CodeSniffer/Standards/Squiz/Sniffs/",
+                    "CodeSniffer/Standards/Zend/Sniffs/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Greg Sherwood",
+                    "role": "lead"
+                }
+            ],
+            "description": "PHP_CodeSniffer tokenises PHP, JavaScript and CSS files and detects violations of a defined set of coding standards.",
+            "homepage": "http://www.squizlabs.com/php-codesniffer",
+            "keywords": [
+                "phpcs",
+                "standards"
+            ],
+            "time": "2014-09-25 03:33:46"
         }
     ],
-    "aliases": [
-
-    ],
+    "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": {
-        "atoum/atoum": 20
-    },
+    "stability-flags": [],
+    "prefer-stable": false,
     "platform": {
         "php": ">=5.4.0"
     },
-    "platform-dev": [
-
-    ]
+    "platform-dev": []
 }

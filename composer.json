@@ -12,7 +12,9 @@
         "php": ">=5.4.0"
     },
     "require-dev": {
-        "atoum/atoum": "master-dev"
+        "atoum/atoum": "~1.0",
+        "m6web/symfony2-coding-standard": "~1.2",
+        "m6web/coke": "~1.2"
     },
     "autoload": {
         "psr-0": { "M6Web\\Component\\Statsd\\": "src/" }

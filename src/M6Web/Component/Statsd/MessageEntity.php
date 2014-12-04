@@ -1,7 +1,4 @@
 <?php
-/**
- * Entity class for a statsd message
- */
 
 namespace M6Web\Component\Statsd;
 
@@ -61,15 +58,16 @@ class MessageEntity
      */
     protected function checkConstructor()
     {
-        if (!is_string($this->node) or !is_string($this->unit))
-        {
-            throw new Exception ('node and unit have to be a string');
+        if (!is_string($this->node) or !is_string($this->unit)) {
+            throw new Exception('node and unit have to be a string');
         }
+
         if (!is_int($this->value)) {
             throw new Exception('value has to be an integer');
         }
+
         if (!is_float($this->sampleRate) or ($this->sampleRate <= 0)) {
-            throw new Exception ('sampleRate has to be a non-zero posivite float');
+            throw new Exception('sampleRate has to be a non-zero posivite float');
         }
     }
 
@@ -133,5 +131,4 @@ class MessageEntity
 
         return $message;
     }
-
-} 
+}
