@@ -13,4 +13,6 @@ $client->count('a.graphite.node', 5);
 $client->timing('another.graphite.node', (float) $timing);
 $client->set('a.graphite.set', 12);
 $client->gauge('a.gauge.node', 8);
+
+$client->send(); // Send the metrics to the servers
 ```
