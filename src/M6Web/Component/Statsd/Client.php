@@ -133,14 +133,15 @@ class Client
      * @param string $value      value
      * @param float  $sampleRate sampling rate
      * @param string $unit       unit
+     * @param array  $tags       Tags key => value for influxDb
      *
      * @return Client
      */
-    protected function addToSend($stats, $value, $sampleRate, $unit)
+    protected function addToSend($stats, $value, $sampleRate, $unit, $tags)
     {
 
         $message =  new MessageEntity(
-            (string) $stats, (int) $value, (string) $unit, (float) $sampleRate
+            (string) $stats, (int) $value, (string) $unit, (float) $sampleRate, $tags
         );
 
         $queue = [
@@ -175,12 +176,13 @@ class Client
      * @param string    $stats      The metric to in log timing info for.
      * @param int       $time       The ellapsed time (ms) to log
      * @param float|int $sampleRate the rate (0-1) for sampling.
+     * @param array     $tags       Tags key => value for influxDb
      *
      * @return Client
      */
-    public function timing($stats, $time, $sampleRate = 1.0)
+    public function timing($stats, $time, $sampleRate = 1.0, $tags = [])
     {
-        $this->addToSend($stats, $time, $sampleRate, 'ms');
+        $this->addToSend($stats, $time, $sampleRate, 'ms', $tags);
 
         return $this;
     }
@@ -190,14 +192,15 @@ class Client
      *
      * @param string $stats      The metric(s) to increment.
      * @param float  $sampleRate SamplingRate
+     * @param array  $tags       Tags key => value for influxDb
      *
      * @internal param $ float|1 $sampleRate the rate (0-1) for sampling.
      *
      * @return Client
      */
-    public function increment($stats, $sampleRate = 1.0)
+    public function increment($stats, $sampleRate = 1.0, $tags = [])
     {
-        $this->count($stats, '1', $sampleRate);
+        $this->count($stats, '1', $sampleRate, $tags);
 
         return $this;
     }
@@ -208,12 +211,13 @@ class Client
      *
      * @param string    $stats      The metric(s) to decrement.
      * @param float|int $sampleRate the rate (0-1) for sampling.
+     * @param array     $tags       Tags key => value for influxDb
      *
      * @return Client
      */
-    public function decrement($stats, $sampleRate = 1)
+    public function decrement($stats, $sampleRate = 1, $tags = [])
     {
-        $this->count($stats, '-1', $sampleRate);
+        $this->count($stats, '-1', $sampleRate, $tags);
 
         return $this;
     }
@@ -224,14 +228,15 @@ class Client
      * @param string    $stats      The metric(s) to count
      * @param int       $value      The count value
      * @param float|int $sampleRate the rate (0-1) for sampling.
+     * @param array     $tags       Tags key => value for influxDb
      *
      * @access public
      *
      * @return Client
      */
-    public function count($stats, $value, $sampleRate = 1)
+    public function count($stats, $value, $sampleRate = 1, $tags = [])
     {
-        $this->addToSend($stats, $value, $sampleRate, 'c');
+        $this->addToSend($stats, $value, $sampleRate, 'c', $tags);
 
         return $this;
     }
@@ -242,13 +247,14 @@ class Client
      * @param string    $stats      The metric(s) to count
      * @param int       $value      The value
      * @param float|int $sampleRate the rate (0-1) for sampling.
+     * @param array     $tags       Tags key => value for influxDb
      *
      * @access public
      * @return Client
      */
-    public function gauge($stats, $value, $sampleRate = 1)
+    public function gauge($stats, $value, $sampleRate = 1, $tags = [])
     {
-        $this->addToSend($stats, $value, $sampleRate, 'g');
+        $this->addToSend($stats, $value, $sampleRate, 'g', $tags);
 
         return $this;
     }
@@ -259,13 +265,14 @@ class Client
      * @param string    $stats      The metric(s) to count
      * @param int       $value      The value
      * @param float|int $sampleRate the rate (0-1) for sampling.
+     * @param array     $tags       Tags key => value for influxDb
      *
      * @access public
      * @return Client
      */
-    public function set($stats, $value, $sampleRate = 1)
+    public function set($stats, $value, $sampleRate = 1, $tags = [])
     {
-        $this->addToSend($stats, $value, $sampleRate, 's');
+        $this->addToSend($stats, $value, $sampleRate, 's', $tags);
 
         return $this;
     }
@@ -315,6 +322,7 @@ class Client
         $fp = fsockopen($s['address'], $s['port']);
         if ($fp !== false) {
             foreach ($datas as $value) {
+                var_dump($value);
                 // write packets
                 if (!@fwrite($fp, $value)) {
                     return false;

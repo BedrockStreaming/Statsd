@@ -30,6 +30,11 @@ class MessageEntity
     protected $unit;
 
     /**
+     * @var array
+     */
+    protected $tags = [];
+
+    /**
      * @param string $node       node
      * @param int    $value      value of the node
      * @param string $unit       units (ms for timer, c for counting ...)
@@ -37,7 +42,7 @@ class MessageEntity
      *
      * @return MessageEntity
      */
-    public function __construct($node, $value, $unit = '', $sampleRate = 1.0)
+    public function __construct($node, $value, $unit = '', $sampleRate = 1.0, $tags = [])
     {
         $this->node  = $node;
         $this->value = $value;
@@ -47,6 +52,8 @@ class MessageEntity
         if (!is_null($unit)) {
             $this->unit = $unit;
         }
+
+        $this->tags = $tags ?: [];
 
         $this->checkConstructor();
     }
@@ -68,6 +75,10 @@ class MessageEntity
 
         if (!is_float($this->sampleRate) or ($this->sampleRate <= 0)) {
             throw new Exception('sampleRate has to be a non-zero posivite float');
+        }
+
+        if (!is_array($this->tags)) {
+            throw new Exception('Tags has to be an array');
         }
     }
 
@@ -118,13 +129,45 @@ class MessageEntity
     }
 
     /**
+     * @return array
+     */
+    public function getTags()
+    {
+        return $this->tags;
+    }
+
+    /**
+     * @return string Tags formatted for sending
+     * ex: "server=5,country=fr"
+     */
+    private function getTagsAsString()
+    {
+        $tags = array_map(function($k, $v) {
+            return $k.'='.$v;
+        }, array_keys($this->getTags()), $this->getTags());
+
+        return implode(',', $tags);
+    }
+
+    /**
+     * @return string the node with tags as string
+     * ex : node "foo.bar" and tag ["country" => "fr" ] Into "foo.bar,country=fr"
+     */
+    private function getFullNode()
+    {
+        $tagsString = $this->getTagsAsString();
+
+        return $tagsString ? $this->getNode().','.$tagsString : $this->getNode();
+    }
+
+    /**
      * format a statsd message
      *
      * @return string
      */
     public function getStatsdMessage()
     {
-        $message = sprintf('%s:%s|%s', $this->getNode(), $this->getValue(), $this->getUnit());
+        $message = sprintf('%s:%s|%s', $this->getFullNode(), $this->getValue(), $this->getUnit());
         if ($this->useSampleRate()) {
             $message .= sprintf('|@%s', $this->getSampleRate());
         }
