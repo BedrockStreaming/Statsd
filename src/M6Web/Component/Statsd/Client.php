@@ -322,7 +322,6 @@ class Client
         $fp = fsockopen($s['address'], $s['port']);
         if ($fp !== false) {
             foreach ($datas as $value) {
-                var_dump($value);
                 // write packets
                 if (!@fwrite($fp, $value)) {
                     return false;
