@@ -39,6 +39,7 @@ class MessageEntity
      * @param int    $value      value of the node
      * @param string $unit       units (ms for timer, c for counting ...)
      * @param float  $sampleRate sampling rate
+     * @param array  $tags       Tags key => value for influxDb
      *
      * @return MessageEntity
      */
