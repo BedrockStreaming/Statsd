@@ -130,14 +130,6 @@ class MessageEntity
     }
 
     /**
-     * @return array
-     */
-    public function getTags()
-    {
-        return $this->tags;
-    }
-
-    /**
      * @return string Tags formatted for sending
      * ex: "server=5,country=fr"
      */
@@ -145,7 +137,7 @@ class MessageEntity
     {
         $tags = array_map(function($k, $v) {
             return $k.'='.$v;
-        }, array_keys($this->getTags()), $this->getTags());
+        }, array_keys($this->tags), $this->tags);
 
         return implode(',', $tags);
     }
