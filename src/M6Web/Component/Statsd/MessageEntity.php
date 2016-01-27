@@ -148,9 +148,11 @@ class MessageEntity
      */
     private function getFullNode()
     {
-        $tagsString = $this->getTagsAsString();
+        if ($this->tags) {
+            return $this->getNode().','.$this->getTagsAsString();
+        }
 
-        return $tagsString ? $this->getNode().','.$tagsString : $this->getNode();
+        return $this->getNode();
     }
 
     /**
