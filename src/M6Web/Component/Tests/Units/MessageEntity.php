@@ -56,6 +56,14 @@ class MessageEntity extends atoum\test
                 ->string($messageEntity->getStatsdMessage())
                     ->isEqualTo('raoul.node:1|c|@0.2')
         ;
+
+        // with tags
+        $this->if($messageEntity = new Statsd\MessageEntity(
+            'raoul.node', 1, 'c', 0.2, ['foo' => 'bar']))
+            ->then()
+            ->string($messageEntity->getStatsdMessage())
+            ->isEqualTo('raoul.node,foo=bar:1|c|@0.2')
+        ;
     }
 
     public function testErrorConstructorStatsdMessage()
@@ -87,5 +95,10 @@ class MessageEntity extends atoum\test
             })
             ->isInstanceOf('\M6Web\Component\Statsd\Exception');
 
+        $this->exception(
+            function() {
+                new Statsd\MessageEntity('raoul.node', 1, 'c', 1, 'stringTag');
+            }
+        )->isInstanceOf('\M6Web\Component\Statsd\Exception');
     }
 }
