@@ -35,6 +35,12 @@ class Client
     private $serverKeys = array();
 
     /**
+     * Timeout to send the data
+     * @const integer
+     */
+    const TIMEOUT = 2;
+
+    /**
      * contructeur
      * @param array $servers les serveurs
      */
@@ -320,6 +326,7 @@ class Client
         }
         $s = $this->getServers()[$server];
         $fp = fsockopen($s['address'], $s['port']);
+        stream_set_timeout($fp, self::TIMEOUT);
         if ($fp !== false) {
             foreach ($datas as $value) {
                 // write packets
