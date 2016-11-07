@@ -94,7 +94,7 @@ class Client
     /**
      * set stats prefix
      *
-     * @param $prefix prefix
+     * @param string $prefix a prefix to prepend to all stats names
      */
     public function setPrefix($prefix)
     {
