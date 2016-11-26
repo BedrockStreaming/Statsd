@@ -308,28 +308,30 @@ class Client
      * send datas to servers
      *
      * @param string $server server key
-     * @param array  $datas  array de data à env
+     * @param array  $datas  data to send
      *
      * @throws Exception
      * @return bool
      */
     public function writeDatas($server, $datas)
     {
+        static $fp = array();
+
         if (!isset($this->getServers()[$server])) {
             throw new Exception($server." undefined in the configuration");
         }
-        $s = $this->getServers()[$server];
-        $fp = fsockopen($s['address'], $s['port']);
-        if ($fp !== false) {
+
+        if (!isset($fp[$server])) {
+            $s = $this->getServers()[$server];
+            $fp[$server] = fsockopen($s['address'], $s['port']);
+        }
+
+        if ($fp[$server] !== false) {
             foreach ($datas as $value) {
                 // write packets
-                if (!@fwrite($fp, $value)) {
+                if (!@fwrite($fp[$server], $value)) {
                     return false;
                 }
-            }
-            // close conn
-            if (!fclose($fp)) {
-                return false;
             }
         } else {
             return false;
