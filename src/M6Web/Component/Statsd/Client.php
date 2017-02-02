@@ -319,7 +319,7 @@ class Client
             throw new Exception($server." undefined in the configuration");
         }
         $s = $this->getServers()[$server];
-        $fp = fsockopen($s['address'], $s['port']);
+        $fp = @fsockopen($s['address'], $s['port']);
         if ($fp !== false) {
             foreach ($datas as $value) {
                 // write packets
