@@ -35,6 +35,12 @@ class Client
     private $serverKeys = array();
 
     /**
+     * stats names prefix
+     * @var array
+     */
+    private $prefix = '';
+
+    /**
      * contructeur
      * @param array $servers les serveurs
      */
@@ -83,6 +89,16 @@ class Client
     protected function initQueue()
     {
         $this->toSend = new \SplQueue();
+    }
+
+    /**
+     * set stats prefix
+     *
+     * @param string $prefix a prefix to prepend to all stats names
+     */
+    public function setPrefix($prefix)
+    {
+        $this->prefix = $prefix;
     }
 
     /**
@@ -163,7 +179,7 @@ class Client
 
         foreach ($this->getToSend() as $metric) {
             $server = $metric['server'];
-            $sampledData[$server][] = $metric['message']->getStatsdMessage();
+            $sampledData[$server][] = $this->prefix . $metric['message']->getStatsdMessage();
 
         }
 
