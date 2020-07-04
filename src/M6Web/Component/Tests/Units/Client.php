@@ -1,5 +1,5 @@
 <?php
-namespace M6Web\Component\Statsd\tests\units;
+namespace M6Web\Component\Statsd\Tests\Units;
 
 use
     \M6Web\Component\Statsd,

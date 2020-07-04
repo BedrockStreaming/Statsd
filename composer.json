@@ -17,6 +17,16 @@
         "m6web/coke": "~1.2"
     },
     "autoload": {
-        "psr-0": { "M6Web\\Component\\Statsd\\": "src/" }
+        "psr-4": {
+            "M6Web\\Component\\Statsd\\": "src/M6Web/Component/Statsd"
+        },
+        "exclude-from-classmap": [
+            "src/M6Web/Component/Tests/"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "M6Web\\Component\\Statsd\\Tests\\": "src/M6Web/Component/Tests/"
+        }
     }
 }
