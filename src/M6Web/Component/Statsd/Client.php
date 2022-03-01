@@ -5,6 +5,9 @@
  */
 namespace M6Web\Component\Statsd;
 
+use M6Web\Component\Statsd\MessageFormatter\InfluxDBStatsDMessageFormatter;
+use M6Web\Component\Statsd\MessageFormatter\MessageFormatterInterface;
+
 /**
  * client Statsd
  */
@@ -35,13 +38,24 @@ class Client
     private $serverKeys = array();
 
     /**
-     * contructeur
-     * @param array $servers les serveurs
+     * @var $messageFormatter
      */
-    public function __construct(array $servers)
+    private $messageFormatter;
+
+    /**
+     * contructeur
+     * @param array                          $servers les serveurs
+     * @param MessageFormatterInterface|null $messageFormatter
+     */
+    public function __construct(array $servers, MessageFormatterInterface $messageFormatter = null)
     {
         $this->init($servers);
         $this->initQueue();
+        $this->messageFormatter = $messageFormatter;
+
+        if (!$this->messageFormatter) {
+            $this->messageFormatter = new InfluxDBStatsDMessageFormatter();
+        }
     }
 
     /**
@@ -163,7 +177,9 @@ class Client
 
         foreach ($this->getToSend() as $metric) {
             $server = $metric['server'];
-            $sampledData[$server][] = $metric['message']->getStatsdMessage();
+            /** @var MessageEntity $message */
+            $message = $metric['message'];
+            $sampledData[$server][] = $this->messageFormatter->format($message);
 
         }
 

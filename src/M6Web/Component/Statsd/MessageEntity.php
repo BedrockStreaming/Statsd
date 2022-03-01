@@ -88,7 +88,7 @@ class MessageEntity
      *
      * @return bool
      */
-    protected function useSampleRate()
+    public function useSampleRate()
     {
         if (($this->getSampleRate() < 1) && (mt_rand() / mt_getrandmax()) <= $this->getSampleRate()) {
             return true;
@@ -130,6 +130,14 @@ class MessageEntity
     }
 
     /**
+     * @return array
+     */
+    public function getTags()
+    {
+        return $this->tags;
+    }
+
+    /**
      * @return string Tags formatted for sending
      * ex: "server=5,country=fr"
      */
@@ -159,9 +167,22 @@ class MessageEntity
      * format a statsd message
      *
      * @return string
+     *
+     * @deprecated
      */
     public function getStatsdMessage()
     {
+        trigger_error(
+            sprintf(
+                '%s is deprecated and will be removed in the next major version. ' .
+                'Update your code to use %s::%s.',
+                __METHOD__,
+                'M6Web\Component\Statsd\MessageFormatter\MessageFormatterInterface',
+                'format'
+            ),
+            E_USER_DEPRECATED
+        );
+
         $message = sprintf('%s:%s|%s', $this->getFullNode(), $this->getValue(), $this->getUnit());
         if ($this->useSampleRate()) {
             $message .= sprintf('|@%s', $this->getSampleRate());
