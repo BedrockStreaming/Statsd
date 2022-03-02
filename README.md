@@ -1,4 +1,4 @@
-# Stastd PHP Component [![Build Status](https://travis-ci.org/M6Web/Statsd.png?branch=master)](https://travis-ci.org/M6Web/Statsd)
+# Stastd PHP Component [![Build Status](https://github.com/BedrockStreaming/Statsd/actions/workflows/tests.yml/badge.svg)](https://github.com/BedrockStreaming/Statsd/actions/workflows/tests.yml)
 
 [usage](doc/usage.md)
 
