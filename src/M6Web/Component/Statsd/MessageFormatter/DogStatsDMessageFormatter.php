@@ -1,4 +1,5 @@
 <?php
+
 namespace M6Web\Component\Statsd\MessageFormatter;
 
 use M6Web\Component\Statsd\MessageEntity;
@@ -21,21 +22,19 @@ class DogStatsDMessageFormatter implements MessageFormatterInterface
         }
 
         if ($message->getTags()) {
-            $formatted .= '|#' . $this->getTagsAsString($message);
+            $formatted .= '|#'.$this->getTagsAsString($message);
         }
 
-        return $formatted . "\n";
+        return $formatted."\n";
     }
 
     /**
-     * @param MessageEntity $message
-     *
      * @return string
      */
     private function getTagsAsString(MessageEntity $message)
     {
-        $tags = array_map(static function($k, $v) {
-            return $k . ':' . $v;
+        $tags = array_map(static function ($k, $v) {
+            return $k.':'.$v;
         }, array_keys($message->getTags()), $message->getTags());
 
         return implode(',', $tags);

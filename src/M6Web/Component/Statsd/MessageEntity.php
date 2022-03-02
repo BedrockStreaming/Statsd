@@ -162,7 +162,7 @@ class MessageEntity
     {
         trigger_error(
             sprintf(
-                '%s is deprecated and will be removed in the next major version. ' .
+                '%s is deprecated and will be removed in the next major version. '.
                 'Update your code to use %s::%s.',
                 __METHOD__,
                 'M6Web\Component\Statsd\MessageFormatter\MessageFormatterInterface',

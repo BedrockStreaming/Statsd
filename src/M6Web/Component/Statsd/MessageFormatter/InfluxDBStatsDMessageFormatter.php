@@ -1,4 +1,5 @@
 <?php
+
 namespace M6Web\Component\Statsd\MessageFormatter;
 
 use M6Web\Component\Statsd\MessageEntity;
@@ -17,7 +18,7 @@ class InfluxDBStatsDMessageFormatter implements MessageFormatterInterface
         $node = $message->getNode();
 
         if ($message->getTags()) {
-            $node .= ',' . $this->getTagsAsString($message);
+            $node .= ','.$this->getTagsAsString($message);
         }
 
         $formatted = sprintf('%s:%s|%s', $node, $message->getValue(), $message->getUnit());
@@ -30,14 +31,12 @@ class InfluxDBStatsDMessageFormatter implements MessageFormatterInterface
     }
 
     /**
-     * @param MessageEntity $message
-     *
      * @return string
      */
     private function getTagsAsString(MessageEntity $message)
     {
-        $tags = array_map(static function($k, $v) {
-            return $k . '=' . $v;
+        $tags = array_map(static function ($k, $v) {
+            return $k.'='.$v;
         }, array_keys($message->getTags()), $message->getTags());
 
         return implode(',', $tags);

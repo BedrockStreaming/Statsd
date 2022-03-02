@@ -1,9 +1,9 @@
 <?php
+
 namespace M6Web\Component\Statsd\Tests\Units\MessageFormatter;
 
-use
-    \M6Web\Component\Statsd,
-    \mageekguy\atoum
+use M6Web\Component\Statsd;
+use mageekguy\atoum
     ;
 
 class InfluxDBStatsDMessageFormatter extends atoum\test

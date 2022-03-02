@@ -41,25 +41,19 @@ class Client
      */
     private $serverKeys = [];
 
-    /**
-     * @var MessageFormatterInterface
-     */
+    /** @var MessageFormatterInterface */
     private $messageFormatter;
 
     /**
      * contructeur
-     * @param array                          $servers les serveurs
-     * @param MessageFormatterInterface|null $messageFormatter
+     *
+     * @param array $servers les serveurs
      */
     public function __construct(array $servers, MessageFormatterInterface $messageFormatter = null)
     {
         $this->init($servers);
         $this->initQueue();
-        $this->messageFormatter = $messageFormatter;
-
-        if (!$this->messageFormatter) {
-            $this->messageFormatter = new InfluxDBStatsDMessageFormatter();
-        }
+        $this->messageFormatter = $messageFormatter ?: new InfluxDBStatsDMessageFormatter();
     }
 
     /**
