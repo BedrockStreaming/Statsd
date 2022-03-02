@@ -38,7 +38,7 @@ class Client
     private $serverKeys = array();
 
     /**
-     * @var $messageFormatter
+     * @var MessageFormatterInterface
      */
     private $messageFormatter;
 
