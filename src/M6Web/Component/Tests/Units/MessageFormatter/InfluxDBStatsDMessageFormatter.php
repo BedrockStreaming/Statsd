@@ -19,9 +19,6 @@ class InfluxDBStatsDMessageFormatter extends atoum\test
             ->isEqualTo('raoul.node:1|c');
 
         // sampled message
-        $this->function->mt_rand = 1;
-        $this->function->mt_getrandmax = 10;
-
         $message = new \mock\M6Web\Component\Statsd\MessageEntity('raoul.node', 1, 'c', 0.2);
         $this->calling($message)->useSampleRate = true;
         $this
