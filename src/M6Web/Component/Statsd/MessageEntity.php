@@ -4,34 +4,22 @@ namespace M6Web\Component\Statsd;
 
 /**
  * Class MessageEntity
- *
- * @package M6Web\Component\Statsd
  */
 class MessageEntity
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $node;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $value;
 
-    /**
-     * @var float
-     */
+    /** @var float */
     protected $sampleRate;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $unit;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     protected $tags = [];
 
     /**
@@ -45,7 +33,7 @@ class MessageEntity
      */
     public function __construct($node, $value, $unit = '', $sampleRate = 1.0, $tags = [])
     {
-        $this->node  = $node;
+        $this->node = $node;
         $this->value = $value;
         if (!is_null($sampleRate)) {
             $this->sampleRate = $sampleRate;
@@ -139,11 +127,11 @@ class MessageEntity
 
     /**
      * @return string Tags formatted for sending
-     * ex: "server=5,country=fr"
+     *                ex: "server=5,country=fr"
      */
     private function getTagsAsString()
     {
-        $tags = array_map(function($k, $v) {
+        $tags = array_map(function ($k, $v) {
             return $k.'='.$v;
         }, array_keys($this->tags), $this->tags);
 
@@ -152,7 +140,7 @@ class MessageEntity
 
     /**
      * @return string the node with tags as string
-     * ex : node "foo.bar" and tag ["country" => "fr" ] Into "foo.bar,country=fr"
+     *                ex : node "foo.bar" and tag ["country" => "fr" ] Into "foo.bar,country=fr"
      */
     private function getFullNode()
     {

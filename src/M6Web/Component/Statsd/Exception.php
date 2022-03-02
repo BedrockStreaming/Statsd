@@ -2,6 +2,7 @@
 /**
  * Statsd exception
  */
+
 namespace M6Web\Component\Statsd;
 
 /**

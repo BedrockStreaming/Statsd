@@ -1,9 +1,9 @@
 <?php
+
 namespace M6Web\Component\Statsd\Tests\Units;
 
-use
-    \M6Web\Component\Statsd,
-    \mageekguy\atoum
+use M6Web\Component\Statsd;
+use mageekguy\atoum
 ;
 
 /**
@@ -30,7 +30,6 @@ class MessageEntity extends atoum\test
             ->and()
                 ->string($messageEntity->getUnit())
                 ->isIdenticalTo('c');
-
     }
 
     /**
@@ -58,8 +57,8 @@ class MessageEntity extends atoum\test
             ->exists();
 
         // sampled message
-        $this->function->mt_rand = function() { return 1;};
-        $this->function->mt_getrandmax = function() { return 10;};
+        $this->function->mt_rand = function () { return 1; };
+        $this->function->mt_getrandmax = function () { return 10; };
 
         $this
             ->when(function() {
@@ -120,7 +119,7 @@ class MessageEntity extends atoum\test
             ->isInstanceOf('\M6Web\Component\Statsd\Exception');
 
         $this->exception(
-            function() {
+            function () {
                 new Statsd\MessageEntity('raoul.node', 1, 'c', 1, 'stringTag');
             }
         )->isInstanceOf('\M6Web\Component\Statsd\Exception');

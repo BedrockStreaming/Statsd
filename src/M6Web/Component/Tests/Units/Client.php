@@ -1,11 +1,9 @@
 <?php
+
 namespace M6Web\Component\Statsd\Tests\Units;
 
-use
-    \M6Web\Component\Statsd,
-    \mageekguy\atoum,
-    mock\M6Web\Component as mock
-;
+use M6Web\Component\Statsd;
+use mageekguy\atoum;
 
 /**
  * test class for Statsd client
@@ -19,31 +17,31 @@ class Client extends atoum\test
     {
         $this->assert
             ->exception(function () {
-                new Statsd\Client(array());
+                new Statsd\Client([]);
             })
             ->isInstanceOf('\M6Web\Component\Statsd\Exception')
-            ->exception( function () {
+            ->exception(function () {
                 new Statsd\Client(
-                    array(
-                        'serv1' => array('port' => 8125)
-                    )
+                    [
+                        'serv1' => ['port' => 8125],
+                    ]
                 );
             })
             ->isInstanceOf('\M6Web\Component\Statsd\Exception')
-            ->exception( function () {
+            ->exception(function () {
                 new Statsd\Client(
-                    array(
-                        'serv1' => array('address' => 'udp://200.22.143.12'),
-                        'serv2' => array('port' => 8125, 'address' => 'udp://200.22.143.12')
-                    )
+                    [
+                        'serv1' => ['address' => 'udp://200.22.143.12'],
+                        'serv2' => ['port' => 8125, 'address' => 'udp://200.22.143.12'],
+                    ]
                 );
             })
             ->isInstanceOf('\M6Web\Component\Statsd\Exception')
-            ->exception( function () {
+            ->exception(function () {
                 new Statsd\Client(
-                    array(
-                        'serv1' => array('port' => 8125, 'address' => 'http://200.22.143.12')
-                    )
+                    [
+                        'serv1' => ['port' => 8125, 'address' => 'http://200.22.143.12'],
+                    ]
                 );
             })
             ->isInstanceOf('\M6Web\Component\Statsd\Exception');
@@ -51,19 +49,20 @@ class Client extends atoum\test
 
     /**
      * send back a server config
+     *
      * @return array
      */
     protected function getConf()
     {
-
-        return array(
-            'serv1' => array('address' => 'udp://200.22.143.xxx', 'port' => '8125'),
-            'serv2' => array('address' => 'udp://200.22.143.xxx', 'port' => '8126'),
-        );
+        return [
+            'serv1' => ['address' => 'udp://200.22.143.xxx', 'port' => '8125'],
+            'serv2' => ['address' => 'udp://200.22.143.xxx', 'port' => '8126'],
+        ];
     }
 
     /**
      * test of getServers
+     *
      * @return void
      */
     public function testGetServers()
@@ -77,6 +76,7 @@ class Client extends atoum\test
 
     /**
      * Test get server key
+     *
      * @return void
      */
     public function testGetServerKey()
@@ -91,6 +91,7 @@ class Client extends atoum\test
 
     /**
      * Test clear
+     *
      * @return void
      */
     public function testClear()
@@ -102,6 +103,7 @@ class Client extends atoum\test
 
     /**
      * testTiming
+     *
      * @return void
      */
     public function testTiming()
@@ -124,14 +126,14 @@ class Client extends atoum\test
                     ->isEqualTo(1)
                 ->array($queue->dequeue())
                     ->isEqualTo([
-                        'server' => 'serv1'
-                        , 'message' => $message
+                        'server' => 'serv1', 'message' => $message,
                     ])
         ;
     }
 
     /**
      * testIncrement
+     *
      * @return void
      */
     public function testIncrement()
@@ -154,14 +156,14 @@ class Client extends atoum\test
                     ->isEqualTo(1)
                 ->array($queue->dequeue())
                     ->isEqualTo([
-                        'server' => 'serv1'
-                        , 'message' => $message
+                        'server' => 'serv1', 'message' => $message,
                     ])
         ;
     }
 
     /**
      * testDecrement
+     *
      * @return void
      */
     public function testDecrement()
@@ -184,8 +186,7 @@ class Client extends atoum\test
                     ->isEqualTo(1)
                 ->array($queue->dequeue())
                     ->isEqualTo([
-                        'server' => 'serv1'
-                        , 'message' => $message
+                        'server' => 'serv1', 'message' => $message,
                     ])
         ;
     }
@@ -193,12 +194,10 @@ class Client extends atoum\test
     /**
      * testCount
      *
-     * @access public
      * @return void
      */
     public function testCount()
     {
-
         $message = new Statsd\MessageEntity(
             'service.raoul',
             5,
@@ -216,8 +215,7 @@ class Client extends atoum\test
                     ->isEqualTo(1)
                 ->array($queue->dequeue())
                     ->isEqualTo([
-                        'server' => 'serv1'
-                        , 'message' => $message
+                        'server' => 'serv1', 'message' => $message,
                     ])
                 ->integer($queue->count())
                     ->isEqualTo(0)
@@ -227,12 +225,10 @@ class Client extends atoum\test
     /**
      * testGauge
      *
-     * @access public
      * @return void
      */
     public function testGauge()
     {
-
         $message = new Statsd\MessageEntity(
             'service.raoul',
             3,
@@ -250,8 +246,7 @@ class Client extends atoum\test
                     ->isEqualTo(1)
                 ->array($queue->dequeue())
                     ->isEqualTo([
-                        'server' => 'serv1'
-                        , 'message' => $message
+                        'server' => 'serv1', 'message' => $message,
                     ])
                 ->integer($queue->count())
                     ->isEqualTo(0)
@@ -261,7 +256,6 @@ class Client extends atoum\test
     /**
      * testSet
      *
-     * @access public
      * @return void
      */
     public function testSet()
@@ -284,8 +278,7 @@ class Client extends atoum\test
                     ->isEqualTo(1)
                 ->array($queue->dequeue())
                     ->isEqualTo([
-                        'server' => 'serv1'
-                        , 'message' => $message
+                        'server' => 'serv1', 'message' => $message,
                     ])
                 ->integer($queue->count())
                     ->isEqualTo(0)
@@ -294,6 +287,7 @@ class Client extends atoum\test
 
     /**
      * Test send
+     *
      * @return void
      */
     public function testSend()
@@ -305,7 +299,6 @@ class Client extends atoum\test
         $this->mockClass("\M6Web\Component\Statsd\Client");
         $client = new \mock\M6Web\Component\Statsd\Client($this->getConf());
         $client->getMockController()->writeDatas = function ($server, $datas) {
-
             return true;
         };
         $this->if($client->increment('service.foo'))
@@ -318,7 +311,6 @@ class Client extends atoum\test
                     ->withAnyArguments()->exactly(1);
         $client = new \mock\M6Web\Component\Statsd\Client($this->getConf());
         $client->getMockController()->writeDatas = function ($server, $datas) {
-
             return true;
         };
         $this->if($client->increment('service.foo')->increment('service.foo')) // incr x2
@@ -330,7 +322,6 @@ class Client extends atoum\test
                     ->withAnyArguments()->exactly(1); // but one call
         $client = new \mock\M6Web\Component\Statsd\Client($this->getConf());
         $client->getMockController()->writeDatas = function ($server, $datas) {
-
             return true;
         };
         $this->if($client->increment('foo2')->increment('foo')) // incr x2
