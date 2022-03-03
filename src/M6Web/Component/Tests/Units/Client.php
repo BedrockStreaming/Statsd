@@ -306,7 +306,9 @@ class Client extends atoum\test
             ->boolean($client->send())
             ->isEqualTo(true)
             ->mock($client)
-                ->call('writeDatas')->exactly(1);
+                ->call('writeDatas')
+                    ->withArguments('serv2', ['service.foo:1|c'])->once()
+                    ->withAnyArguments()->exactly(1);
         $client = new \mock\M6Web\Component\Statsd\Client($this->getConf());
         $client->getMockController()->writeDatas = function ($server, $datas) {
             return true;
@@ -315,7 +317,9 @@ class Client extends atoum\test
             ->then()
             ->boolean($client->send())
             ->mock($client)
-                ->call('writeDatas')->exactly(1); // but one call
+                ->call('writeDatas')
+                    ->withArguments('serv2', ['service.foo:1|c', 'service.foo:1|c'])->once()
+                    ->withAnyArguments()->exactly(1); // but one call
         $client = new \mock\M6Web\Component\Statsd\Client($this->getConf());
         $client->getMockController()->writeDatas = function ($server, $datas) {
             return true;
@@ -324,12 +328,19 @@ class Client extends atoum\test
             ->then()
             ->boolean($client->send())
             ->mock($client)
-                ->call('writeDatas')->exactly(2);
+                ->call('writeDatas')
+                    ->withArguments('serv1', ['foo2:1|c'])->once()
+                    ->withArguments('serv2', ['foo:1|c'])->once()
+                    ->withAnyArguments()->exactly(2);
 
         $this->if($client->count('foocount', 5))
             ->then()
             ->boolean($client->send())
             ->mock($client)
-                ->call('writeDatas')->exactly(3);
+                ->call('writeDatas')
+                    ->withArguments('serv1', ['foo2:1|c'])->once()
+                    ->withArguments('serv2', ['foo:1|c'])->once()
+                    ->withArguments('serv2', ['foocount:5|c'])->once()
+                    ->withAnyArguments()->exactly(3);
     }
 }

@@ -5,7 +5,8 @@
                     array(
                         'serv1' => array('address' => 'udp://200.22.143.12'),
                         'serv2' => array('port' => 8125, 'address' => 'udp://200.22.143.12')
-                    )
+                    ),
+                    new \M6Web\Component\Statsd\MessageFormatter\InfluxDBStatsDMessageFormatter()
                 );
 
 $client->increment('a.graphite.node');
