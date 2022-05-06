@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace M6Web\Component\Statsd\Tests\Units\MessageFormatter;
 
 use M6Web\Component\Statsd;
