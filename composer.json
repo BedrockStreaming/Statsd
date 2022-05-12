@@ -9,7 +9,7 @@
     },
     "minimum-stability" : "dev",
     "require": {
-        "php": ">=5.4.0"
+        "php": ">=7.1"
     },
     "require-dev": {
         "atoum/atoum": "^2.8|^3.0",
