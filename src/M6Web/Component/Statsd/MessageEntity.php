@@ -25,11 +25,11 @@ class MessageEntity
     protected $tags = [];
 
     /**
-     * @param string $node       node
-     * @param int    $value      value of the node
-     * @param string $unit       units (ms for timer, c for counting ...)
-     * @param float  $sampleRate sampling rate
-     * @param array  $tags       Tags key => value for influxDb
+     * @param string        $node       node
+     * @param int|string    $value      value of the node
+     * @param string        $unit       units (ms for timer, c for counting ...)
+     * @param float         $sampleRate sampling rate
+     * @param array         $tags       Tags key => value for influxDb
      *
      * @return MessageEntity
      */
@@ -60,7 +60,7 @@ class MessageEntity
             throw new Exception('node and unit have to be a string');
         }
 
-        if (!is_int($this->value)) {
+        if (!is_int(intval($this->value))) {
             throw new Exception('value has to be an integer');
         }
 

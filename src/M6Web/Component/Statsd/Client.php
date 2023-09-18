@@ -158,7 +158,7 @@ class Client
     protected function addToSend($stats, $value, $sampleRate, $unit, $tags)
     {
         $message = new MessageEntity(
-            (string) $stats, (int) $value, (string) $unit, (float) $sampleRate, $tags
+            (string) $stats, $value, (string) $unit, (float) $sampleRate, $tags
         );
 
         $queue = [
