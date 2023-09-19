@@ -60,7 +60,7 @@ class MessageEntity
             throw new Exception('node and unit have to be a string');
         }
 
-        if (!is_int($this->value) || !is_string($this->value)) {
+        if (!is_int($this->value) && !is_string($this->value)) {
             throw new Exception('value has to be an integer or a string');
         }
 
