@@ -147,11 +147,11 @@ class Client
     /**
      * addToSend
      *
-     * @param string $stats      grahite node
-     * @param string $value      value
-     * @param float  $sampleRate sampling rate
-     * @param string $unit       unit
-     * @param array  $tags       Tags key => value for influxDb
+     * @param string     $stats      grahite node
+     * @param int|string $value      value
+     * @param float      $sampleRate sampling rate
+     * @param string     $unit       unit
+     * @param array      $tags       Tags key => value for influxDb
      *
      * @return Client
      */
