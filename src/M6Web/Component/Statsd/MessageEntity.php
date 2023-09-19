@@ -25,11 +25,11 @@ class MessageEntity
     protected $tags = [];
 
     /**
-     * @param string        $node       node
-     * @param int|string    $value      value of the node
-     * @param string        $unit       units (ms for timer, c for counting ...)
-     * @param float         $sampleRate sampling rate
-     * @param array         $tags       Tags key => value for influxDb
+     * @param string     $node       node
+     * @param int|string $value      value of the node
+     * @param string     $unit       units (ms for timer, c for counting ...)
+     * @param float      $sampleRate sampling rate
+     * @param array      $tags       Tags key => value for influxDb
      *
      * @return MessageEntity
      */

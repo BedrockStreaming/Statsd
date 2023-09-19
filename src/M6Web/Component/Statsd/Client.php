@@ -63,9 +63,9 @@ class Client
      *
      * @param array $servers les serveurs
      *
-     * @throws Exception
-     *
      * @return void
+     *
+     * @throws Exception
      */
     protected function init(array $servers)
     {
@@ -322,9 +322,9 @@ class Client
      * @param string $server server key
      * @param array  $datas  array de data à env
      *
-     * @throws Exception
-     *
      * @return bool
+     *
+     * @throws Exception
      */
     public function writeDatas($server, $datas)
     {
