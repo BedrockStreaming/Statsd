@@ -63,9 +63,9 @@ class Client
      *
      * @param array $servers les serveurs
      *
-     * @throws Exception
-     *
      * @return void
+     *
+     * @throws Exception
      */
     protected function init(array $servers)
     {
@@ -147,18 +147,18 @@ class Client
     /**
      * addToSend
      *
-     * @param string $stats      grahite node
-     * @param string $value      value
-     * @param float  $sampleRate sampling rate
-     * @param string $unit       unit
-     * @param array  $tags       Tags key => value for influxDb
+     * @param string     $stats      grahite node
+     * @param int|string $value      value
+     * @param float      $sampleRate sampling rate
+     * @param string     $unit       unit
+     * @param array      $tags       Tags key => value for influxDb
      *
      * @return Client
      */
     protected function addToSend($stats, $value, $sampleRate, $unit, $tags)
     {
         $message = new MessageEntity(
-            (string) $stats, (int) $value, (string) $unit, (float) $sampleRate, $tags
+            (string) $stats, $value, (string) $unit, (float) $sampleRate, $tags
         );
 
         $queue = [
@@ -322,9 +322,9 @@ class Client
      * @param string $server server key
      * @param array  $datas  array de data à env
      *
-     * @throws Exception
-     *
      * @return bool
+     *
+     * @throws Exception
      */
     public function writeDatas($server, $datas)
     {
